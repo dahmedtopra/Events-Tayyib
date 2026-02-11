@@ -1,0 +1,7 @@
+# Copy this file to .github/CODEOWNERS and replace placeholders.
+
+* @dtopra
+
+/apps/kiosk-backend/ @dtopra
+/apps/kiosk-frontend/ @dtopra
+/docs/ @dtopra

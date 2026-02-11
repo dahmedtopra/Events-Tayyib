@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+pydantic
+chromadb
+pypdf
+pyyaml
+requests
+tiktoken
+python-dotenv

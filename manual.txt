@@ -1,0 +1,31 @@
+Backend (PowerShell)
+
+cd C:\Users\iccia\code\event-tayyib\apps\kiosk-backend
+.\.venv\Scripts\activate
+python -m uvicorn app.main:app --reload --port 8006 --env-file C:\Users\iccia\code\event-tayyib\.env
+Frontend (PowerShell)
+
+cd C:\Users\iccia\code\event-tayyib\apps\kiosk-frontend
+npm install
+npm run dev -- --port 5176
+Localhost URLs
+
+Frontend: http://localhost:5176
+Backend health: http://127.0.0.1:8006/api/health
+RAG test: http://127.0.0.1:8006/api/rag_test
+
+powershell -NoExit -ExecutionPolicy Bypass -File "C:\Users\iccia\code\event-tayyib\dev.ps1"
+
+
+Port summary (avoid conflicts with Umrah-Tayyib):
+  Umrah-Tayyib:  frontend=5175  backend=8005
+  event-tayyib:  frontend=5176  backend=8006
+
+# Frontend
+cd C:\Users\iccia\code\event-tayyib\apps\kiosk-frontend; npm run dev -- --port 5176
+
+# Backend
+cd C:\Users\iccia\code\event-tayyib\apps\kiosk-backend; .\.venv\Scripts\Activate.ps1; python -m uvicorn app.main:app --reload --port 8006 --env-file C:\Users\iccia\code\event-tayyib\.env
+
+# RAG Ingest (from repo root)
+cd C:\Users\iccia\code\event-tayyib; python scripts/ingest_sources.py --reset
