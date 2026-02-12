@@ -18,7 +18,7 @@ from app.db.sqlite import init_db, get_sqlite_path
 
 
 def create_app() -> FastAPI:
-  repo_root = Path(__file__).resolve().parents[3]
+  repo_root = Path(__file__).resolve().parents[2]
   backend_env = Path(__file__).resolve().parents[1] / ".env"
   env_loaded = [str(repo_root / ".env"), str(backend_env)]
   if (repo_root / ".env").exists():
