@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Optional
 
 def default_sqlite_path() -> str:
-  repo_root = Path(__file__).resolve().parents[4]
+  repo_root = Path(__file__).resolve().parents[3]
   return str(repo_root / "data" / "analytics.sqlite")
 
 SCHEMA_SQL = """
