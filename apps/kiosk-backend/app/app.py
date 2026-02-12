@@ -66,7 +66,7 @@ app = create_app()
 
 @app.get("/")
 def response():
-  return {"Salam from Event Kiosk, how can I help you today?"}
+    return {"message": "Salam from Event Kiosk, how can I help you today?"}
 
 @app.get("/api/version")
 def version():
