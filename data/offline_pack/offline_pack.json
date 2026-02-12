@@ -8,26 +8,20 @@
       "What is the event timeline?"
     ],
     "answer": {
-      "direct": "Makkah Halal Forum (Third Edition) runs from 14 to 16 February 2026 (26-28 Shaaban 1447).",
+      "direct": "Makkah Halal Forum (Third Edition) runs from 14 to 16 February 2026 (26-28 Shaaban 1447) at the Makkah Chamber Exhibition & Convention Center, under the patronage of H.E. Dr. Majid bin Abdullah Al-Qasabi, Minister of Commerce.",
       "steps": [
-        "Plan your visit between Saturday 14 February and Monday 16 February 2026",
-        "Confirm your target sessions by day before arriving",
-        "Arrive early for registration windows"
+        "Day 1: Saturday 14 February – High-Level Conference, Exhibition, B2B, Cooking Show, Roundtable",
+        "Day 2: Sunday 15 February – Conference, Masterclass, Exhibition, MoU Signing, Opening Ceremony",
+        "Day 3: Monday 16 February – Exhibition, B2B, Women Empowerment Track, HalalPreneurship Track, Halal Echo"
       ],
       "mistakes": [
         "Confusing Gregorian dates with Hijri dates",
-        "Arriving after key sessions begin"
+        "Arriving after registration closes at 2:00 PM"
       ]
     },
-    "tags": [
-      "timeline",
-      "dates",
-      "forum"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_en"
-    ]
+    "tags": ["timeline", "dates", "forum", "overview"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_en"]
   },
   {
     "id": "en-mhf-venue-1",
@@ -42,22 +36,16 @@
       "steps": [
         "Use the venue name exactly in maps and ride apps",
         "Check hall and theatre labels on arrival",
-        "Follow signage to registration first"
+        "Follow signage to registration first at the Main Exhibition Hall"
       ],
       "mistakes": [
         "Going to a different chamber building",
         "Skipping check-in before sessions"
       ]
     },
-    "tags": [
-      "venue",
-      "location",
-      "directions"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_en"
-    ]
+    "tags": ["venue", "location", "directions"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_en"]
   },
   {
     "id": "en-mhf-day1-1",
@@ -65,29 +53,47 @@
     "question_variants": [
       "What happens on Day 1?",
       "Saturday forum program",
-      "Day 1 sessions and timings"
+      "Day 1 schedule and timings"
     ],
     "answer": {
-      "direct": "Day 1 (Saturday 14 February 2026) includes registration, high-level conference sessions, exhibition, B2B activity, experts corner, and evening roundtable.",
+      "direct": "Day 1 (Saturday 14 February 2026) includes Registration (1:30-2:00 PM), High-Level Conference (2:00-8:00 PM) at the Theatre, Exhibition (2:00-10:00 PM), B2B Meetings (2:00-10:00 PM), Halal Experts Corner by reservation (2:00-10:00 PM), Halal Cooking Show (3:00-9:00 PM), and a High-Level Roundtable closed session (7:00-9:00 PM).",
       "steps": [
-        "Registration opens at 1:30 PM and runs to 2:00 PM",
-        "Conference stage sessions run from 2:00 PM to 8:00 PM",
-        "Exhibition and networking activity continue into the evening"
+        "Register at the Main Exhibition Hall from 1:30 PM",
+        "Conference sessions run at the Theatre from 2:00 PM to 8:00 PM with prayer breaks",
+        "Exhibition and networking activities continue until 10:00 PM"
+      ],
+      "mistakes": [
+        "Missing registration which closes at 2:00 PM",
+        "Not reserving Halal Experts Corner sessions in advance"
+      ]
+    },
+    "tags": ["day1", "program", "sessions", "saturday"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_en"]
+  },
+  {
+    "id": "en-mhf-day1-sessions",
+    "lang": "EN",
+    "question_variants": [
+      "What are the Day 1 conference sessions?",
+      "Saturday conference program details",
+      "What sessions are on Day 1?"
+    ],
+    "answer": {
+      "direct": "Day 1 conference sessions at the Theatre: Opening Remarks (2:00-2:05 PM), Session 1 'Building a Halal Brand as a Path to Global Positioning' (2:10-3:25 PM), Session 2 'Halal as a Global Professional Identity' (3:30-3:50 PM), Asr Prayer (3:50-4:15 PM), Session 3 'Halal Positioning – A National Economic Asset' (4:15-5:35 PM), Session 4 'Investment in the Halal Sector from the Perspective of International Investors' (5:40-6:00 PM), Maghrib Prayer (6:00-6:35 PM), Session 5 'Islamic Finance and Investment – The Foundation of Global Professionalism in the Halal Industry' (6:35-8:00 PM).",
+      "steps": [
+        "Arrive by 2:00 PM for the opening remarks",
+        "Plan around Asr Prayer break at 3:50 PM and Maghrib at 6:00 PM",
+        "Session 5 on Islamic Finance is the final evening session until 8:00 PM"
       ],
       "mistakes": [
         "Missing the opening block at 2:00 PM",
-        "Not reserving expert sessions in advance"
+        "Not accounting for prayer breaks in your schedule"
       ]
     },
-    "tags": [
-      "day1",
-      "program",
-      "sessions"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_en"
-    ]
+    "tags": ["day1", "conference", "sessions", "theatre"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_en"]
   },
   {
     "id": "en-mhf-day2-1",
@@ -95,29 +101,47 @@
     "question_variants": [
       "What is scheduled for Day 2?",
       "Sunday program details",
-      "Day 2 conference and masterclass"
+      "Day 2 schedule"
     ],
     "answer": {
-      "direct": "Day 2 (Sunday 15 February 2026) includes conference sessions, a masterclass track, exhibition activity, experts corner, MoU signing platform, and opening ceremony.",
+      "direct": "Day 2 (Sunday 15 February 2026) includes Registration (1:30-2:00 PM), Exhibition (2:00-10:00 PM), High-Level Conference (2:00-10:00 PM), Halal Cooking Show (3:00-9:00 PM), Halal Experts Corner (3:00-7:00 PM), Specialized Workshops/Masterclasses (4:00-6:00 PM) in the Meeting Room, MoU Signing Platform at the Media Wall (7:00-8:00 PM), and Opening Ceremony by invitation (8:00-10:00 PM) at the Theatre.",
       "steps": [
         "Complete registration between 1:30 PM and 2:00 PM",
-        "Prioritize theatre sessions and meeting-room masterclass times",
-        "Check evening events including MoU and ceremony windows"
+        "Coordinate between Theatre sessions and Meeting Room masterclass",
+        "The Opening Ceremony (by invitation only) starts at 8:00 PM"
       ],
       "mistakes": [
         "Assuming all Day 2 activities are in one zone",
         "Overlapping masterclass and conference plans"
       ]
     },
-    "tags": [
-      "day2",
-      "masterclass",
-      "conference"
+    "tags": ["day2", "masterclass", "conference", "sunday"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_en"]
+  },
+  {
+    "id": "en-mhf-day2-sessions",
+    "lang": "EN",
+    "question_variants": [
+      "What are the Day 2 conference sessions?",
+      "Sunday conference and masterclass details",
+      "Day 2 session topics"
     ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_en"
-    ]
+    "answer": {
+      "direct": "Day 2 conference at the Theatre: Session 6 'CEO Readiness for Strategic Competency Development' (2:00-3:20 PM), Asr Prayer (3:20-4:15 PM), Session 7 'International Success – Capacity Building in Bosnia and Herzegovina' (4:15-4:35 PM), Session 8 'Powered by Halal Echo: From Influence to Leadership' (4:40-5:55 PM), Halal Initiatives Platform Program (6:00-6:10 PM). Masterclass in Meeting Room: 'Future-Ready Halal: Technology, AI, and New Business Models' (4:00-6:00 PM).",
+      "steps": [
+        "Session 6 starts at 2:00 PM at the Theatre",
+        "The Masterclass on AI and Technology runs 4:00-6:00 PM in the Meeting Room",
+        "Halal Echo session on influencers runs 4:40-5:55 PM at the Theatre"
+      ],
+      "mistakes": [
+        "Trying to attend the masterclass and Theatre sessions at the same time (4:00-6:00 PM overlap)",
+        "Missing the Halal Initiatives Platform which is only 10 minutes"
+      ]
+    },
+    "tags": ["day2", "conference", "masterclass", "sessions"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_en"]
   },
   {
     "id": "en-mhf-day3-1",
@@ -128,26 +152,44 @@
       "Day 3 tracks"
     ],
     "answer": {
-      "direct": "Day 3 (Monday 16 February 2026) features exhibition, B2B meetings, halal cooking show, women empowerment track, halalpreneurship track, and influencer gathering.",
+      "direct": "Day 3 (Monday 16 February 2026) includes Registration (1:30-2:00 PM), Exhibition (2:00-10:00 PM), B2B Meetings (2:00-10:00 PM), Halal Cooking Show (3:00-9:00 PM), Women Empowerment in Halal Track (4:00-5:20 PM) at the Theatre, Masterclasses (4:00-6:00 PM) in the Meeting Room, HalalPreneurship Track (5:30-6:45 PM) at the Theatre, and Halal Echo Influencers Gathering (7:00-9:00 PM) in the Meeting Room.",
       "steps": [
-        "Register at 1:30 PM before track sessions",
-        "Select either track sessions or B2B blocks first",
-        "Use the evening period for networking and influencer activities"
+        "Register at 1:30 PM before track sessions begin at 4:00 PM",
+        "Choose between Women Empowerment (Theatre) and Masterclass (Meeting Room) at 4:00 PM",
+        "HalalPreneurship panel starts at 5:30 PM, Halal Echo gathering at 7:00 PM"
       ],
       "mistakes": [
-        "Trying to attend overlapping track sessions",
+        "Trying to attend overlapping Theatre and Meeting Room sessions",
         "Skipping the final-day networking slots"
       ]
     },
-    "tags": [
-      "day3",
-      "tracks",
-      "networking"
+    "tags": ["day3", "tracks", "networking", "monday"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_en"]
+  },
+  {
+    "id": "en-mhf-day3-sessions",
+    "lang": "EN",
+    "question_variants": [
+      "What are the Day 3 conference sessions?",
+      "Monday panels and masterclass",
+      "Day 3 session details"
     ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_en"
-    ]
+    "answer": {
+      "direct": "Day 3 sessions: Women Empowerment Track (partnership with Maida Nazir Organization) – Panel 'Empowering Muslim Women Professionals in Global Halal Markets' at Theatre (4:00-5:20 PM). HalalPreneurship Track (partnership with SKSEED) – Panel 'Success Stories of Halal Startups in Shaping the Future of Global Trade' at Theatre (5:30-6:45 PM). Masterclass: 'SMIIC, OIC Global Halal Quality Infrastructure' in Meeting Room (4:00-6:00 PM).",
+      "steps": [
+        "Women Empowerment panel starts at 4:00 PM at the Theatre",
+        "HalalPreneurship panel follows at 5:30 PM at the Theatre",
+        "SMIIC/OIC masterclass runs 4:00-6:00 PM in Meeting Room (overlaps with Theatre)"
+      ],
+      "mistakes": [
+        "Trying to attend both Theatre panel and Meeting Room masterclass at 4:00 PM",
+        "Missing the HalalPreneurship panel which starts right after Women Empowerment"
+      ]
+    },
+    "tags": ["day3", "conference", "women", "halalpreneurship", "masterclass"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_en"]
   },
   {
     "id": "en-mhf-b2b-1",
@@ -158,26 +200,117 @@
       "B2B platform timing"
     ],
     "answer": {
-      "direct": "The B2B platform is a curated matchmaking track designed for targeted peer-to-peer and strategic business connections.",
+      "direct": "The B2B Meetings Platform is a curated matchmaking track at the Networking Lounge, available on Day 1 (2:00-10:00 PM) and Day 3 (2:00-10:00 PM). It facilitates targeted peer-to-peer meetings and strategic connections among global halal stakeholders.",
       "steps": [
-        "Check day-specific B2B timing in the program",
-        "Arrive with your business profile and objectives",
-        "Use networking lounge periods to follow up"
+        "B2B is at the Networking Lounge on Day 1 (Saturday) and Day 3 (Monday)",
+        "Sessions run from 2:00 PM to 10:00 PM both days",
+        "Arrive with your business profile and clear objectives"
       ],
       "mistakes": [
-        "Attending without clear meeting goals",
-        "Missing scheduled matching windows"
+        "Looking for B2B on Day 2 (it's not scheduled that day)",
+        "Attending without clear meeting goals"
       ]
     },
-    "tags": [
-      "b2b",
-      "meetings",
-      "networking"
+    "tags": ["b2b", "meetings", "networking"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_en"]
+  },
+  {
+    "id": "en-mhf-cooking-1",
+    "lang": "EN",
+    "question_variants": [
+      "What is the Halal Cooking Show?",
+      "When is the cooking show?",
+      "Cooking demonstrations"
     ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_en"
-    ]
+    "answer": {
+      "direct": "The Halal Cooking Show runs all 3 days from 3:00 PM to 9:00 PM at the Main Exhibition Hall. It features live culinary demonstrations highlighting the creativity and global versatility of halal ingredients, reimagining international cuisines through halal-compliant innovation.",
+      "steps": [
+        "Available every day: Day 1, 2, and 3 from 3:00 PM to 9:00 PM",
+        "Located in the Main Exhibition Hall",
+        "No reservation needed – walk up and watch"
+      ],
+      "mistakes": [
+        "Arriving before 3:00 PM when the show hasn't started",
+        "Confusing the cooking show zone with the conference Theatre"
+      ]
+    },
+    "tags": ["cooking", "show", "food", "exhibition"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_en"]
+  },
+  {
+    "id": "en-mhf-experts-1",
+    "lang": "EN",
+    "question_variants": [
+      "What is the Halal Experts Corner?",
+      "How to book expert sessions?",
+      "Expert advisory sessions"
+    ],
+    "answer": {
+      "direct": "The Halal Experts Corner offers dedicated one-on-one advisory sessions with leading halal compliance, certification, and industry specialists. It requires reservation in advance. Available Day 1 (2:00-10:00 PM) and Day 2 (3:00-7:00 PM) at the Main Exhibition Hall.",
+      "steps": [
+        "Book your slot in advance – sessions are by reservation only",
+        "Day 1: available 2:00-10:00 PM, Day 2: available 3:00-7:00 PM",
+        "Located in the Main Exhibition Hall"
+      ],
+      "mistakes": [
+        "Showing up without a reservation",
+        "Looking for experts on Day 3 (not available)"
+      ]
+    },
+    "tags": ["experts", "advisory", "certification", "reservation"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_en"]
+  },
+  {
+    "id": "en-mhf-registration-1",
+    "lang": "EN",
+    "question_variants": [
+      "What time is registration?",
+      "Where do I register?",
+      "Registration help"
+    ],
+    "answer": {
+      "direct": "Registration is at the Main Exhibition Hall from 1:30 PM to 2:00 PM on all three days (Saturday, Sunday, and Monday). Arrive early to complete check-in before sessions begin at 2:00 PM.",
+      "steps": [
+        "Go to the Main Exhibition Hall",
+        "Registration window is 1:30 PM to 2:00 PM each day",
+        "Complete registration before conference sessions start at 2:00 PM"
+      ],
+      "mistakes": [
+        "Arriving after 2:00 PM when registration has closed",
+        "Going directly to the Theatre without registering first"
+      ]
+    },
+    "tags": ["registration", "check-in", "timing"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_en"]
+  },
+  {
+    "id": "en-mhf-zones-1",
+    "lang": "EN",
+    "question_variants": [
+      "What are the venue zones?",
+      "Where are the different areas?",
+      "Venue map zones"
+    ],
+    "answer": {
+      "direct": "The venue has several key zones: Main Exhibition Hall (registration, exhibition, cooking show, experts corner), Theatre (conference sessions, opening ceremony), Networking Lounge (B2B meetings), Meeting Room (masterclasses, roundtables, Halal Echo), and Media Wall (MoU signing).",
+      "steps": [
+        "Main Exhibition Hall: registration, exhibition booths, cooking show, experts corner",
+        "Theatre: all conference sessions and the Opening Ceremony",
+        "Meeting Room: masterclasses, roundtable, and Halal Echo gathering",
+        "Networking Lounge: B2B meetings platform"
+      ],
+      "mistakes": [
+        "Confusing the Theatre with the Meeting Room",
+        "Not checking which zone your session is in before heading there"
+      ]
+    },
+    "tags": ["zones", "venue", "map", "navigation"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_en"]
   },
   {
     "id": "en-mhf-landmarks-guide-1",
@@ -199,15 +332,9 @@
         "Skipping location context before travel"
       ]
     },
-    "tags": [
-      "landmarks",
-      "guide",
-      "pilgrims"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_landmarks_en"
-    ]
+    "tags": ["landmarks", "guide", "pilgrims"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_landmarks_en"]
   },
   {
     "id": "en-mhf-landmarks-list-1",
@@ -229,255 +356,177 @@
         "Attempting too many sites in one trip"
       ]
     },
-    "tags": [
-      "mount thawr",
-      "hira",
-      "at-taneem"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_landmarks_en"
-    ]
+    "tags": ["mount thawr", "hira", "at-taneem"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_landmarks_en"]
   },
   {
     "id": "ar-mhf-overview-1",
     "lang": "AR",
     "question_variants": [
-      "??? ????? ????? ??? ???????",
-      "?? ????? ????????",
-      "?? ?????? ??????? ?????????"
+      "متى يقام منتدى مكة للحلال؟",
+      "ما مواعيد المنتدى؟",
+      "ما الجدول الزمني للفعالية؟"
     ],
     "answer": {
-      "direct": "????? ????? ??? ?????? (?????? ???????) ?? 14 ??? 16 ?????? 2026? ??????? 26 ??? 28 ????? 1447.",
+      "direct": "منتدى مكة للحلال (النسخة الثالثة) من 14 إلى 16 فبراير 2026 (26-28 شعبان 1447هـ) في مركز معارض ومؤتمرات غرفة مكة المكرمة، تحت رعاية معالي الدكتور ماجد بن عبدالله القصبي وزير التجارة.",
       "steps": [
-        "???? ??? ????? ??? ????? 14 ?????? ???????? 16 ??????",
-        "???? ?????? ?? ??? ??? ??????",
-        "???? ?????? ??? ???????"
+        "اليوم الأول: السبت 14 فبراير – مؤتمر رفيع المستوى، معرض، اجتماعات أعمال، عرض طهي، طاولة مستديرة",
+        "اليوم الثاني: الأحد 15 فبراير – مؤتمر، ماستركلاس، معرض، توقيع مذكرات تفاهم، حفل افتتاح",
+        "اليوم الثالث: الاثنين 16 فبراير – معرض، اجتماعات أعمال، مسار تمكين المرأة، ريادة الأعمال الحلال، صدى الحلال"
       ],
       "mistakes": [
-        "????? ??? ??????? ???????? ???????",
-        "?????? ??? ????? ??????? ??????"
+        "الخلط بين التواريخ الميلادية والهجرية",
+        "الوصول بعد إغلاق التسجيل الساعة 2:00 م"
       ]
     },
-    "tags": [
-      "????????",
-      "??????",
-      "???????"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_ar"
-    ]
+    "tags": ["الجدول", "المواعيد", "المنتدى"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_ar"]
   },
   {
     "id": "ar-mhf-venue-1",
     "lang": "AR",
     "question_variants": [
-      "??? ????? ????????",
-      "?? ???? ?????????",
-      "???? ????? ??? ??????"
+      "أين تقام الفعالية؟",
+      "ما مكان المنتدى؟",
+      "موقع منتدى مكة للحلال"
     ],
     "answer": {
-      "direct": "???? ???????? ?? ???? ???? ??? ??????? ??????? ??????????.",
+      "direct": "تقام الفعالية في مركز معارض ومؤتمرات غرفة مكة المكرمة.",
       "steps": [
-        "?????? ????? ?????? ?????? ?? ??????? ???????",
-        "???? ????? ??? ????? ???????",
-        "???? ??????? ????????? ?????? ??? ???????"
+        "استخدم الاسم الكامل للمكان في تطبيقات الخرائط والنقل",
+        "تحقق من لافتات القاعات والمسرح عند الوصول",
+        "توجه للتسجيل أولاً في القاعة الرئيسية للمعارض"
       ],
       "mistakes": [
-        "??????? ??? ???? ???? ?????? ???",
-        "????? ??????? ??? ???? ???????"
+        "التوجه إلى مبنى غرفة تجارية مختلف",
+        "تخطي التسجيل قبل حضور الجلسات"
       ]
     },
-    "tags": [
-      "??????",
-      "??????",
-      "?????????"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_ar"
-    ]
+    "tags": ["المكان", "الموقع", "الاتجاهات"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_ar"]
   },
   {
     "id": "ar-mhf-day1-1",
     "lang": "AR",
     "question_variants": [
-      "???? ????? ????? ??????",
-      "?????? ????? ?? ???????",
-      "????? ????? ?????"
+      "ماذا يحدث اليوم الأول؟",
+      "برنامج يوم السبت",
+      "جدول اليوم الأول"
     ],
     "answer": {
-      "direct": "????? ????? (????? 14 ?????? 2026) ????? ???????? ??????? ???? ???????? ??????? ???? ?????? ???????? ??? ????? ??????? ???????? ????????? ????????.",
+      "direct": "اليوم الأول (السبت 14 فبراير 2026) يشمل التسجيل (1:30-2:00 م)، المؤتمر رفيع المستوى (2:00-8:00 م) في المسرح، المعرض (2:00-10:00 م)، اجتماعات الأعمال B2B (2:00-10:00 م)، ركن خبراء الحلال بالحجز المسبق (2:00-10:00 م)، عرض الطهي الحلال (3:00-9:00 م)، والطاولة المستديرة المغلقة (7:00-9:00 م).",
       "steps": [
-        "???? ??????? ?? 1:30? ??? 2:00?",
-        "????? ????? ??????? ??? ?????? ??? 8:00?",
-        "???? ??????? ?????? ????????? ???????? ??????"
+        "سجّل في القاعة الرئيسية من الساعة 1:30 م",
+        "جلسات المؤتمر في المسرح من 2:00 م حتى 8:00 م مع فترات صلاة",
+        "أنشطة المعرض والتواصل تستمر حتى 10:00 م"
       ],
       "mistakes": [
-        "????? ????? ???????? ??? 2:00?",
-        "??? ??? ????? ??????? ??????"
+        "تفويت التسجيل الذي يغلق الساعة 2:00 م",
+        "عدم حجز جلسات ركن الخبراء مسبقاً"
       ]
     },
-    "tags": [
-      "????? ?????",
-      "????????",
-      "???????"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_ar"
-    ]
+    "tags": ["اليوم الأول", "البرنامج", "الجلسات"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_ar"]
   },
   {
     "id": "ar-mhf-day2-1",
     "lang": "AR",
     "question_variants": [
-      "?? ?????? ????? ???????",
-      "?????? ??? ?????",
-      "????? ???????????"
+      "ما جدول اليوم الثاني؟",
+      "برنامج يوم الأحد",
+      "جلسات الماستركلاس"
     ],
     "answer": {
-      "direct": "????? ?????? (????? 15 ?????? 2026) ???? ????? ???????? ???????????? ??????? ??? ???????? ???? ????? ?????? ???????? ???? ????????.",
+      "direct": "اليوم الثاني (الأحد 15 فبراير 2026) يشمل التسجيل (1:30-2:00 م)، المعرض (2:00-10:00 م)، المؤتمر (2:00-10:00 م)، عرض الطهي (3:00-9:00 م)، ركن الخبراء (3:00-7:00 م)، ورش الماستركلاس (4:00-6:00 م)، توقيع مذكرات التفاهم (7:00-8:00 م)، وحفل الافتتاح بالدعوة فقط (8:00-10:00 م).",
       "steps": [
-        "???? ??????? ??? 1:30? ?2:00?",
-        "???? ??? ????? ?????? ?????? ???? ??????????",
-        "???? ?? ??????? ????????? ????????"
+        "أكمل التسجيل بين 1:30 م و2:00 م",
+        "نسّق بين جلسات المسرح وماستركلاس غرفة الاجتماعات",
+        "حفل الافتتاح (بالدعوة فقط) يبدأ الساعة 8:00 م"
       ],
       "mistakes": [
-        "?????? ?? ???? ????????? ?? ???? ?????",
-        "????? ???? ??????????? ?? ??????? ????????"
+        "افتراض أن جميع أنشطة اليوم الثاني في منطقة واحدة",
+        "تداخل خطط الماستركلاس والمؤتمر"
       ]
     },
-    "tags": [
-      "????? ??????",
-      "?????????",
-      "???????"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_ar"
-    ]
+    "tags": ["اليوم الثاني", "الماستركلاس", "المؤتمر"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_ar"]
   },
   {
     "id": "ar-mhf-day3-1",
     "lang": "AR",
     "question_variants": [
-      "?? ??????? ????? ???????",
-      "?????? ???????",
-      "?????? ????? ??????"
+      "ما برنامج اليوم الثالث؟",
+      "برنامج الاثنين",
+      "مسارات اليوم الثالث"
     ],
     "answer": {
-      "direct": "????? ?????? (??????? 16 ?????? 2026) ????? ??????? ?????? ??????? B2B? ??? ????? ??????? ???? ????? ??????? ???? ????? ??????? ????? ????????.",
+      "direct": "اليوم الثالث (الاثنين 16 فبراير 2026) يشمل المعرض، اجتماعات B2B، عرض الطهي، مسار تمكين المرأة (4:00-5:20 م) في المسرح، ورش الماستركلاس (4:00-6:00 م)، مسار ريادة الأعمال الحلال (5:30-6:45 م) في المسرح، وتجمّع صدى الحلال للمؤثرين (7:00-9:00 م).",
       "steps": [
-        "???? ???????? ?? ???? ?????? ????????",
-        "???? ??? ????? ???????? ???????? ?????? ???????",
-        "????? ?? ?????? ???????? ??????? ??????"
+        "سجّل في القاعة الرئيسية الساعة 1:30 م",
+        "اختر بين مسار تمكين المرأة في المسرح أو الماستركلاس في غرفة الاجتماعات الساعة 4:00 م",
+        "مسار ريادة الأعمال يبدأ الساعة 5:30 م، وتجمّع صدى الحلال الساعة 7:00 م"
       ],
       "mistakes": [
-        "?????? ???? ????? ??????? ??????",
-        "????? ????? ??????? ?? ????? ???????"
+        "محاولة حضور جلسات متداخلة في المسرح وغرفة الاجتماعات",
+        "تفويت فرص التواصل في اليوم الأخير"
       ]
     },
-    "tags": [
-      "????? ??????",
-      "????????",
-      "???????"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_ar"
-    ]
-  },
-  {
-    "id": "ar-mhf-experts-1",
-    "lang": "AR",
-    "question_variants": [
-      "?? ?? ??? ????? ???????",
-      "??? ???? ???? ??????",
-      "????? ????????? ?? ???????"
-    ],
-    "answer": {
-      "direct": "??? ????? ?????? ???? ????? ???????? ????? ?? ??????? ?? ???????? ????????? ?????? ??????? ???? ?????? ?????? ??????.",
-      "steps": [
-        "???? ?? ??? ????? ??? ?????",
-        "???? ?????? ??? ???? ??????",
-        "???? ?????? ??????? ???? ?????"
-      ],
-      "mistakes": [
-        "?????? ???? ??? ??? ?????? ????????",
-        "??? ????? ???? ??? ??? ????"
-      ]
-    },
-    "tags": [
-      "?????",
-      "????????",
-      "???"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_ar"
-    ]
+    "tags": ["اليوم الثالث", "المسارات", "التواصل"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_ar"]
   },
   {
     "id": "ar-mhf-landmarks-guide-1",
     "lang": "AR",
     "question_variants": [
-      "?? ?? ???? ????? ????",
-      "???? ??????? ??????",
-      "??? ?????? ???? ????????"
+      "ما هو دليل معالم مكة؟",
+      "دليل المعالم للحجاج",
+      "كيف أستخدم دليل المعالم؟"
     ],
     "answer": {
-      "direct": "???? ????? ??? ?? ???? ????? ?????? ????? ???????? ???????? ??????? ?????? ????? ??? ??????.",
+      "direct": "دليل المعالم هو دليل توعوي للحجاج يعرّف بالمعالم الرئيسية في مكة المكرمة وسياقها.",
       "steps": [
-        "???? ???? ????? ???????? ??",
-        "?????? ?????? ?????? ??? ?????? ???????",
-        "???? ????????? ??? ??????? ?????????"
+        "افتح الدليل باللغة المناسبة لك",
+        "استخدم صفحة المحتويات للانتقال إلى المواقع المطلوبة",
+        "اقرأ المعلومات قبل الزيارة الفعلية"
       ],
       "mistakes": [
-        "??????? ???? ??? ??? ??????",
-        "???????? ??? ?????? ??????? ??????"
+        "استخدام نسخة بلغة غير مألوفة",
+        "التنقل دون التحقق من سياق الموقع"
       ]
     },
-    "tags": [
-      "???????",
-      "????",
-      "??????"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_landmarks_ar"
-    ]
+    "tags": ["المعالم", "الدليل", "الحجاج"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_landmarks_ar"]
   },
   {
     "id": "ar-mhf-landmarks-list-1",
     "lang": "AR",
     "question_variants": [
-      "?? ???? ??????? ???????? ?? ???????",
-      "???? ????? ?????? ???",
-      "?? ??????? ???????? ?? ???????"
+      "ما هي المعالم المذكورة في الدليل؟",
+      "أمثلة على معالم مكة",
+      "ما المواقع المشمولة في الدليل؟"
     ],
     "answer": {
-      "direct": "????? ???? ?????? ??????? ??? ??? ???? ??? ????? ???? ????? ????? ?? ???????? ????? ??? ???? ???? ?? ????? ???????.",
+      "direct": "يشمل الدليل معالم مثل جبل ثور، جبل النور وغار حراء، ومسجد عائشة عند ميقات التنعيم.",
       "steps": [
-        "???? ????? ???? ?? ?? ?????",
-        "???? ?? ?????? ??????? ??? ??????",
-        "???? ????????? ????????? ?? ?? ????"
+        "اختر معلماً واحداً في كل مرة",
+        "تحقق من المسار قبل الانطلاق",
+        "التزم بالتعليمات المحلية في كل موقع"
       ],
       "mistakes": [
-        "????? ??? ????? ??????? ?????????",
-        "????? ??? ?????? ?? ??? ????"
+        "الخلط بين مواقع ذات أسماء متشابهة",
+        "محاولة زيارة مواقع كثيرة في رحلة واحدة"
       ]
     },
-    "tags": [
-      "??? ???",
-      "??? ????",
-      "???????"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_landmarks_ar"
-    ]
+    "tags": ["جبل ثور", "غار حراء", "التنعيم"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_landmarks_ar"]
   },
   {
     "id": "fr-mhf-overview-1",
@@ -488,26 +537,20 @@
       "Calendrier de l'evenement"
     ],
     "answer": {
-      "direct": "Le Makkah Halal Forum (troisieme edition) se tient du 14 au 16 fevrier 2026 (26-28 Chaabane 1447).",
+      "direct": "Le Makkah Halal Forum (troisieme edition) se tient du 14 au 16 fevrier 2026 (26-28 Chaabane 1447 H) au Centre d'exposition et de congres de la Chambre de commerce de La Mecque, sous le patronage de S.E. Dr. Majid bin Abdullah Al-Qasabi, Ministre du Commerce.",
       "steps": [
-        "Choisissez votre jour entre le samedi 14 et le lundi 16 fevrier 2026",
-        "Verifiez le programme de la journee avant d'arriver",
-        "Arrivez tot pour la phase d'inscription"
+        "Jour 1 : Samedi 14 fevrier – Conference de haut niveau, Exposition, B2B, Show culinaire, Table ronde",
+        "Jour 2 : Dimanche 15 fevrier – Conference, Masterclass, Exposition, MoU, Ceremonie d'ouverture",
+        "Jour 3 : Lundi 16 fevrier – Exposition, B2B, Parcours Femmes, HalalPreneurship, Halal Echo"
       ],
       "mistakes": [
         "Confondre les dates gregoriennes et hijri",
-        "Arriver apres le debut des sessions importantes"
+        "Arriver apres la fermeture de l'inscription a 14h00"
       ]
     },
-    "tags": [
-      "dates",
-      "calendrier",
-      "forum"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_fr"
-    ]
+    "tags": ["dates", "calendrier", "forum"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_fr"]
   },
   {
     "id": "fr-mhf-venue-1",
@@ -521,7 +564,7 @@
       "direct": "Le forum se deroule au Centre d'exposition et de congres de la Chambre de commerce de La Mecque.",
       "steps": [
         "Utilisez le nom complet du lieu dans votre application de transport",
-        "Passez d'abord par la zone d'inscription",
+        "Passez d'abord par la zone d'inscription au Hall principal",
         "Suivez la signalisation vers le theatre ou le hall principal"
       ],
       "mistakes": [
@@ -529,15 +572,9 @@
         "Ignorer l'enregistrement avant les sessions"
       ]
     },
-    "tags": [
-      "lieu",
-      "adresse",
-      "orientation"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_fr"
-    ]
+    "tags": ["lieu", "adresse", "orientation"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_fr"]
   },
   {
     "id": "fr-mhf-day1-1",
@@ -548,26 +585,20 @@
       "Sessions du Jour 1"
     ],
     "answer": {
-      "direct": "Le Jour 1 (samedi 14 fevrier 2026) comprend inscription, conference de haut niveau, exposition, plateforme B2B, espace experts halal et table ronde en soiree.",
+      "direct": "Le Jour 1 (samedi 14 fevrier 2026) comprend l'inscription (13h30-14h00), la Conference de haut niveau (14h00-20h00) au Theatre, l'Exposition (14h00-22h00), les reunions B2B (14h00-22h00), l'Espace Experts Halal sur reservation (14h00-22h00), le Show culinaire (15h00-21h00), et une Table ronde fermee (19h00-21h00).",
       "steps": [
-        "Inscription de 1:30 pm a 2:00 pm",
-        "Sessions conference de 2:00 pm a 8:00 pm",
-        "Verifiez les activites d'exposition et de networking en soiree"
+        "Inscription au Hall principal a partir de 13h30",
+        "Sessions conference au Theatre de 14h00 a 20h00 avec pauses priere",
+        "Exposition et networking jusqu'a 22h00"
       ],
       "mistakes": [
-        "Manquer l'ouverture a 2:00 pm",
-        "Ne pas reserver l'espace experts a l'avance"
+        "Manquer l'inscription qui ferme a 14h00",
+        "Ne pas reserver l'Espace Experts a l'avance"
       ]
     },
-    "tags": [
-      "jour1",
-      "programme",
-      "sessions"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_fr"
-    ]
+    "tags": ["jour1", "programme", "sessions"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_fr"]
   },
   {
     "id": "fr-mhf-day2-1",
@@ -578,26 +609,20 @@
       "Conference et masterclass Jour 2"
     ],
     "answer": {
-      "direct": "Le Jour 2 (dimanche 15 fevrier 2026) inclut conference, masterclass, exposition, espace experts, plateforme de signature MoU et ceremonie d'ouverture.",
+      "direct": "Le Jour 2 (dimanche 15 fevrier 2026) inclut l'inscription (13h30-14h00), l'Exposition (14h00-22h00), la Conference (14h00-22h00), le Show culinaire (15h00-21h00), l'Espace Experts (15h00-19h00), les Masterclasses (16h00-18h00), la signature de MoU (19h00-20h00), et la Ceremonie d'ouverture sur invitation (20h00-22h00).",
       "steps": [
-        "Terminez l'inscription entre 1:30 pm et 2:00 pm",
+        "Terminez l'inscription entre 13h30 et 14h00",
         "Coordonnez vos horaires entre theatre et salle de reunion",
-        "Confirmez les evenements de soiree"
+        "La Ceremonie d'ouverture (sur invitation) commence a 20h00"
       ],
       "mistakes": [
         "Supposer que toutes les activites sont dans une seule zone",
         "Planifier des sessions qui se chevauchent"
       ]
     },
-    "tags": [
-      "jour2",
-      "masterclass",
-      "conference"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_fr"
-    ]
+    "tags": ["jour2", "masterclass", "conference"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_fr"]
   },
   {
     "id": "fr-mhf-day3-1",
@@ -608,56 +633,20 @@
       "Parcours du dernier jour"
     ],
     "answer": {
-      "direct": "Le Jour 3 (lundi 16 fevrier 2026) propose exposition, reunions B2B, show culinaire halal, parcours Women Empowerment, parcours HalalPreneurship et rassemblement d'influenceurs.",
+      "direct": "Le Jour 3 (lundi 16 fevrier 2026) propose l'Exposition (14h00-22h00), les reunions B2B (14h00-22h00), le Show culinaire (15h00-21h00), le Parcours Autonomisation des femmes (16h00-17h20) au Theatre, les Masterclasses (16h00-18h00), le Parcours HalalPreneurship (17h30-18h45) au Theatre, et le rassemblement Halal Echo (19h00-21h00).",
       "steps": [
-        "Passez par l'inscription en debut d'apres-midi",
-        "Choisissez vos priorites entre parcours et reunions B2B",
-        "Utilisez la soiree pour le networking"
+        "Passez par l'inscription a 13h30",
+        "Choisissez entre le parcours Femmes (Theatre) et la Masterclass (Salle de reunion) a 16h00",
+        "HalalPreneurship a 17h30, Halal Echo a 19h00"
       ],
       "mistakes": [
         "Essayer d'assister a des sessions en conflit horaire",
         "Ne pas exploiter les creneaux de reseautage"
       ]
     },
-    "tags": [
-      "jour3",
-      "parcours",
-      "networking"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_fr"
-    ]
-  },
-  {
-    "id": "fr-mhf-b2b-1",
-    "lang": "FR",
-    "question_variants": [
-      "Comment fonctionne la plateforme B2B ?",
-      "Ou sont les reunions B2B ?",
-      "Horaires B2B"
-    ],
-    "answer": {
-      "direct": "La plateforme B2B est un dispositif de mise en relation ciblee pour faciliter des rencontres professionnelles strategiques entre acteurs du halal.",
-      "steps": [
-        "Consultez les horaires B2B du jour",
-        "Preparez un profil entreprise et des objectifs clairs",
-        "Faites le suivi pendant les periodes de networking"
-      ],
-      "mistakes": [
-        "Venir sans objectif de rendez-vous",
-        "Rater les creneaux de matching"
-      ]
-    },
-    "tags": [
-      "b2b",
-      "reunions",
-      "affaires"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_forum_program_fr"
-    ]
+    "tags": ["jour3", "parcours", "networking"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_forum_program_fr"]
   },
   {
     "id": "fr-mhf-landmarks-guide-1",
@@ -679,15 +668,9 @@
         "Se deplacer sans verifier le contexte du site"
       ]
     },
-    "tags": [
-      "lieux",
-      "guide",
-      "pelerins"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_landmarks_fr"
-    ]
+    "tags": ["lieux", "guide", "pelerins"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_landmarks_fr"]
   },
   {
     "id": "fr-mhf-landmarks-list-1",
@@ -709,104 +692,8 @@
         "Programmer trop de lieux en une seule sortie"
       ]
     },
-    "tags": [
-      "thawr",
-      "hira",
-      "at-tanim"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "mhf_landmarks_fr"
-    ]
-  },
-  {
-    "id": "en-floor-plan-1",
-    "lang": "EN",
-    "question_variants": [
-      "Show me the floor plan",
-      "Open the floor plan",
-      "Where can I see the venue map?"
-    ],
-    "answer": {
-      "direct": "You can view the event floor plan to locate halls, stage areas, and key service points.",
-      "steps": [
-        "Open the floor plan from the kiosk floor-plan option",
-        "Check hall labels and pathways before moving",
-        "Use the marked entrances and service desk points for navigation"
-      ],
-      "mistakes": [
-        "Walking to a hall without checking the plan first",
-        "Mixing up similarly named zones"
-      ]
-    },
-    "tags": [
-      "floor plan",
-      "venue map",
-      "navigation"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "floor_plan_en"
-    ]
-  },
-  {
-    "id": "en-floor-plan-2",
-    "lang": "EN",
-    "question_variants": [
-      "Where is Hall A?",
-      "How do I get to a specific hall?",
-      "Find a hall on the floor plan"
-    ],
-    "answer": {
-      "direct": "Use the floor plan to identify your hall, nearest corridor, and the shortest access route from your current zone.",
-      "steps": [
-        "Locate your current position on the map",
-        "Find your target hall label",
-        "Follow the corridor path and nearest directional signs"
-      ],
-      "mistakes": [
-        "Following crowd flow without confirming hall label",
-        "Ignoring entry points shown on the map"
-      ]
-    },
-    "tags": [
-      "hall",
-      "directions",
-      "route"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "floor_plan_en"
-    ]
-  },
-  {
-    "id": "en-floor-plan-3",
-    "lang": "EN",
-    "question_variants": [
-      "Where is the main stage on the map?",
-      "Main stage location",
-      "How do I reach the stage area?"
-    ],
-    "answer": {
-      "direct": "The floor plan identifies the main stage area and adjacent zones so you can approach from the correct side.",
-      "steps": [
-        "Find the stage marker on the floor plan",
-        "Use the nearest access corridor shown",
-        "Arrive early for better seating and smoother entry"
-      ],
-      "mistakes": [
-        "Entering from a restricted or wrong side",
-        "Arriving at the stage area after session start"
-      ]
-    },
-    "tags": [
-      "main stage",
-      "stage",
-      "session area"
-    ],
-    "last_updated": "2026-02-10T00:00:00Z",
-    "source_ids": [
-      "floor_plan_en"
-    ]
+    "tags": ["thawr", "hira", "at-tanim"],
+    "last_updated": "2026-02-12T00:00:00Z",
+    "source_ids": ["mhf_landmarks_fr"]
   }
 ]

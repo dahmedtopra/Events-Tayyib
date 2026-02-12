@@ -29,7 +29,7 @@ This repository is the "Event AI Guide Kiosk".
 
 ## Commands (local dev)
 - Frontend: npm install; npm run dev; npm run build; npm run preview
-- Backend: python -m venv .venv; .\.venv\Scripts\activate; pip install -r requirements.txt; uvicorn app.main:app --reload
+- Backend: python -m venv .venv; .\.venv\Scripts\activate; pip install -r requirements.txt; uvicorn app.app:app --reload
 
 ## Notes
 - Language locks on Home and stays locked for session.

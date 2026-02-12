@@ -239,13 +239,11 @@ export function SearchExperience({ startAt }: { startAt?: "ATTRACT" | "SEARCH_RE
   const clarifier = response?.clarifying_question;
   const refinement = Array.isArray(response?.refinement_chips) ? response?.refinement_chips : [];
 
-  const clarificationButtons = refinement.length > 0 ? refinement.slice(0, 3) : (
-    query.toLowerCase().includes("session") || query.includes("جلسة")
-      ? ["Session schedule", "Session details", "Session timing"]
-      : query.toLowerCase().includes("speaker") || query.includes("متحدث")
-        ? ["Speaker profile", "Session timing", "Talk topic"]
-        : ["Event schedule", "Session information", "Registration help"]
-  );
+  const clarificationButtons = refinement.length > 0 ? refinement.slice(0, 3) : [
+    t.quickChips[0],
+    t.quickChips[1],
+    t.quickChips[2]
+  ].filter(Boolean);
 
   const followups = refinement.length > 0 ? refinement.slice(0, 3) : [
     t.quickChips[0],
@@ -305,7 +303,11 @@ export function SearchExperience({ startAt }: { startAt?: "ATTRACT" | "SEARCH_RE
                   <div className="absolute inset-0 tayyib-halo" style={{ pointerEvents: "none" }} />
                   <div className="absolute inset-0 rounded-3xl border-2 border-gold-400/30 bg-gradient-to-br from-white/10 to-transparent backdrop-blur-sm" style={{ pointerEvents: "none" }} />
                   <div className="relative h-full flex items-center justify-center">
-                    <TayyibPanel state="home_hero" variant="hero" />
+                    <TayyibPanel
+                      state="home_hero"
+                      variant="hero"
+                      objectPosition={flow === "ATTRACT" ? "center center" : "50% 8%"}
+                    />
                   </div>
                 </div>
               </AnimatedContent>
@@ -460,7 +462,7 @@ export function SearchExperience({ startAt }: { startAt?: "ATTRACT" | "SEARCH_RE
                     className="px-4 py-2 rounded-2xl border-2 border-red-300 text-red-700 bg-red-50 hover:bg-red-100 font-medium shadow-sm"
                     onClick={handleReset}
                   >
-                    End Session
+                    {t.endSession}
                   </button>
                 </div>
               )}
@@ -507,7 +509,7 @@ export function SearchExperience({ startAt }: { startAt?: "ATTRACT" | "SEARCH_RE
                   <div>
                     <div className="text-sm font-semibold mb-2">{t.directAnswer}</div>
                     <div className="text-sm text-gray-700 whitespace-pre-line">
-                      {directAnswer || steps[0] || "(No answer text returned)"}
+                      {directAnswer || steps[0] || t.noAnswerText}
                     </div>
                     {import.meta.env.DEV && (
                       <div className="mt-2 text-xs text-red-700">
@@ -589,7 +591,7 @@ export function SearchExperience({ startAt }: { startAt?: "ATTRACT" | "SEARCH_RE
                 <div className="text-xs text-gray-500">-</div>
               )}
               {sources.map((s, idx) => {
-                const pageLabel = s.page_start && s.page_end ? `pp. ${s.page_start}-${s.page_end}` : s.page ? `p. ${s.page}` : "";
+                const pageLabel = s.page_start && s.page_end ? `${t.pagesAbbr} ${s.page_start}-${s.page_end}` : s.page ? `${t.pageAbbr} ${s.page}` : "";
                 const url = s.url_or_path || s.url || "";
                 const isLink = typeof url === "string" && url.startsWith("http");
                 return (
@@ -612,7 +614,7 @@ export function SearchExperience({ startAt }: { startAt?: "ATTRACT" | "SEARCH_RE
             </div>
             <div className="mt-3 h-44 rounded-3xl border border-gold-200 bg-white/60 shadow-glow relative overflow-hidden tayyib-rim">
               <div className="absolute inset-0 tayyib-halo" />
-              <TayyibPanel state={stateForTayyib} variant="compact" />
+              <TayyibPanel state={stateForTayyib} variant="compact" objectPosition="50% 8%" />
             </div>
           </aside>
         </>

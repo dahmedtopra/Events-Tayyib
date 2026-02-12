@@ -12,6 +12,23 @@ def repo_root() -> Path:
   return Path(__file__).resolve().parents[1]
 
 
+# Load .env from repo root so the script picks up API keys and Chroma Cloud credentials
+_env_path = repo_root() / ".env"
+if _env_path.exists():
+  try:
+    from dotenv import load_dotenv
+    load_dotenv(_env_path, override=True)
+  except ImportError:
+    # Fallback: parse key=value lines manually
+    for line in _env_path.read_text(encoding="utf-8").splitlines():
+      line = line.strip()
+      if not line or line.startswith("#"):
+        continue
+      if "=" in line:
+        k, _, v = line.partition("=")
+        os.environ.setdefault(k.strip(), v.strip())
+
+
 def load_sources() -> List[Dict]:
   path = repo_root() / "data" / "rag_corpus" / "sources.yml"
   if not path.exists():
@@ -220,9 +237,19 @@ def main() -> int:
       except Exception:
         pass
 
-  chroma_path = get_chroma_path()
-  Path(chroma_path).mkdir(parents=True, exist_ok=True)
-  client = chromadb.PersistentClient(path=chroma_path)
+  use_cloud = bool(os.getenv("CHROMA_API_KEY") and os.getenv("CHROMA_TENANT") and os.getenv("CHROMA_DATABASE"))
+  if use_cloud:
+    client = chromadb.CloudClient(
+      api_key=os.getenv("CHROMA_API_KEY"),
+      tenant=os.getenv("CHROMA_TENANT"),
+      database=os.getenv("CHROMA_DATABASE"),
+    )
+    print(f"Using Chroma Cloud (database: {os.getenv('CHROMA_DATABASE')})")
+  else:
+    chroma_path = get_chroma_path()
+    Path(chroma_path).mkdir(parents=True, exist_ok=True)
+    client = chromadb.PersistentClient(path=chroma_path)
+    print(f"Using local Chroma (path: {chroma_path})")
   collection = client.get_or_create_collection(name="event_sources")
   if args.reset:
     try:
@@ -323,7 +350,8 @@ def main() -> int:
         batch_size=args.batch_size
       )
 
-  print(f"Done. Total chunks: {total_chunks}. Chroma path: {chroma_path}")
+  target = f"Chroma Cloud ({os.getenv('CHROMA_DATABASE')})" if use_cloud else f"local ({chroma_path})"
+  print(f"Done. Total chunks: {total_chunks}. Target: {target}")
   return 0
 
 

@@ -5,19 +5,51 @@ import type { TayyibState } from "../tayyib/loops";
 type Props = {
   state: TayyibState;
   variant?: "hero" | "compact";
+  objectPosition?: string;
+  objectFit?: "cover" | "contain";
+  objectScale?: number;
   onError?: (state: TayyibState) => void;
 };
 
-/**
- * Global video cache — each state gets one <video> element that persists
- * across renders so the browser never has to re-fetch or re-decode.
- */
+// Global video cache: each state gets one persistent <video> element.
 const videoCache = new Map<TayyibState, HTMLVideoElement>();
+
+function getCandidates(state: TayyibState): string[] {
+  const raw = TAYYIB_ASSETS[state] ?? [];
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const name of raw) {
+    if (!name || seen.has(name)) continue;
+    seen.add(name);
+    out.push(name);
+  }
+  return out;
+}
+
+function loadCandidate(vid: HTMLVideoElement, candidates: string[], idx: number): boolean {
+  if (idx < 0 || idx >= candidates.length) return false;
+  vid.dataset.candidateIndex = String(idx);
+  vid.dataset.candidateCount = String(candidates.length);
+  vid.dataset.exhausted = "0";
+  vid.src = buildAssetUrl(candidates[idx]);
+  vid.load();
+  return true;
+}
+
+function tryNextCandidate(vid: HTMLVideoElement, candidates: string[]): boolean {
+  const currentIdx = Number(vid.dataset.candidateIndex ?? "0");
+  const nextIdx = currentIdx + 1;
+  if (nextIdx >= candidates.length) {
+    vid.dataset.exhausted = "1";
+    return false;
+  }
+  return loadCandidate(vid, candidates, nextIdx);
+}
 
 function getOrCreateVideo(state: TayyibState): HTMLVideoElement | null {
   if (videoCache.has(state)) return videoCache.get(state)!;
 
-  const candidates = TAYYIB_ASSETS[state] ?? [];
+  const candidates = getCandidates(state);
   if (!candidates.length) return null;
 
   const vid = document.createElement("video");
@@ -30,21 +62,16 @@ function getOrCreateVideo(state: TayyibState): HTMLVideoElement | null {
   vid.style.height = "100%";
   vid.style.objectFit = "cover";
 
-  // Fallback: if the first format (webm) fails, try the second (mp4)
-  if (candidates.length > 1) {
-    vid.addEventListener("error", () => {
-      vid.src = buildAssetUrl(candidates[1]);
-      vid.load();
-    }, { once: true });
-  }
+  // Advance through candidate files until a playable one is found.
+  vid.addEventListener("error", () => {
+    tryNextCandidate(vid, candidates);
+  });
 
-  vid.src = buildAssetUrl(candidates[0]);
-  vid.load();
+  loadCandidate(vid, candidates, 0);
   videoCache.set(state, vid);
   return vid;
 }
 
-/** Preload all state videos on first call. */
 let preloaded = false;
 function preloadAll() {
   if (preloaded) return;
@@ -54,12 +81,18 @@ function preloadAll() {
   }
 }
 
-export function TayyibPanel({ state, variant, onError }: Props) {
+export function TayyibPanel({
+  state,
+  variant,
+  objectPosition = "center center",
+  objectFit = "cover",
+  objectScale = 1,
+  onError
+}: Props) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const activeVideoRef = useRef<HTMLVideoElement | null>(null);
   const [ready, setReady] = useState(false);
 
-  // Preload every video once on mount
   useEffect(() => {
     preloadAll();
   }, []);
@@ -74,66 +107,71 @@ export function TayyibPanel({ state, variant, onError }: Props) {
       return;
     }
 
-    // If the same video is already attached, just make sure it's playing
     if (activeVideoRef.current === vid) {
+      vid.style.objectFit = objectFit;
+      vid.style.objectPosition = objectPosition;
+      vid.style.transformOrigin = "50% 10%";
+      vid.style.transform = `scale(${objectScale})`;
       vid.play().catch(() => {});
       return;
     }
 
-    // Pause the previous video
     if (activeVideoRef.current) {
       activeVideoRef.current.pause();
     }
 
-    // Clear container and attach the new video
     container.innerHTML = "";
     container.appendChild(vid);
     activeVideoRef.current = vid;
+    vid.style.objectFit = objectFit;
+    vid.style.objectPosition = objectPosition;
+    vid.style.transformOrigin = "50% 10%";
+    vid.style.transform = `scale(${objectScale})`;
 
-    // If already loaded, show immediately
+    if (vid.dataset.exhausted === "1") {
+      setReady(false);
+      onError?.(state);
+      return;
+    }
+
     if (vid.readyState >= 3) {
       setReady(true);
       vid.play().catch(() => {});
-    } else {
-      setReady(false);
-      const onLoaded = () => {
-        setReady(true);
-        vid.play().catch(() => {});
-        vid.removeEventListener("loadeddata", onLoaded);
-      };
-      vid.addEventListener("loadeddata", onLoaded);
-      // Also handle error — try mp4 fallback
-      const onErr = () => {
-        vid.removeEventListener("error", onErr);
-        const candidates = TAYYIB_ASSETS[state] ?? [];
-        if (candidates.length > 1) {
-          vid.src = buildAssetUrl(candidates[1]);
-          vid.load();
-        } else {
-          onError?.(state);
-        }
-      };
-      vid.addEventListener("error", onErr, { once: true });
+      return;
     }
-  }, [state, onError]);
+
+    setReady(false);
+    const onLoaded = () => {
+      setReady(true);
+      vid.play().catch(() => {});
+      vid.removeEventListener("loadeddata", onLoaded);
+      vid.removeEventListener("error", onErr);
+    };
+    const onErr = () => {
+      if (vid.dataset.exhausted === "1") {
+        setReady(false);
+        vid.removeEventListener("loadeddata", onLoaded);
+        vid.removeEventListener("error", onErr);
+        onError?.(state);
+      }
+    };
+
+    vid.addEventListener("loadeddata", onLoaded);
+    vid.addEventListener("error", onErr);
+  }, [state, objectFit, objectPosition, objectScale, onError]);
 
   useEffect(() => {
     attachVideo();
   }, [attachVideo]);
 
-  const panelClass =
-    variant === "hero"
-      ? "h-full"
-      : "h-full";
+  const panelClass = variant === "hero" ? "h-full" : "h-full";
 
   return (
     <aside className={`tayyib-panel pointer-events-none w-full relative ${panelClass} rounded-xl bg-white/70 shadow-sm flex items-center justify-center overflow-hidden`}>
       <div className="relative w-full h-full">
-        {/* Subtle shimmer placeholder while video loads */}
         {!ready && (
           <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-gold-50/30 animate-pulse rounded-xl" />
         )}
-        {/* Video container — videos are attached via DOM for caching */}
         <div
           ref={containerRef}
           className={`w-full h-full ${ready ? "opacity-100" : "opacity-0"} transition-opacity duration-300`}

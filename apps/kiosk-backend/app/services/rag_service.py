@@ -23,22 +23,33 @@ _collection = None
 
 telemetry_disabled = os.getenv("CHROMA_TELEMETRY", "false").lower() in ("false", "0", "no")
 
+def _use_cloud() -> bool:
+  return bool(os.getenv("CHROMA_API_KEY") and os.getenv("CHROMA_TENANT") and os.getenv("CHROMA_DATABASE"))
+
+
 def get_collection():
   global _client, _collection
   if _collection is not None:
     return _collection
-  chroma_path = get_chroma_path()
-  if not Path(chroma_path).exists():
-    return None
   try:
     import chromadb
   except Exception:
     return None
   try:
-    if telemetry_disabled:
-      os.environ.setdefault("ANONYMIZED_TELEMETRY", "false")
-      os.environ.setdefault("CHROMA_TELEMETRY", "false")
-    _client = chromadb.PersistentClient(path=chroma_path)
+    if _use_cloud():
+      _client = chromadb.CloudClient(
+        api_key=os.getenv("CHROMA_API_KEY"),
+        tenant=os.getenv("CHROMA_TENANT"),
+        database=os.getenv("CHROMA_DATABASE"),
+      )
+    else:
+      chroma_path = get_chroma_path()
+      if not Path(chroma_path).exists():
+        return None
+      if telemetry_disabled:
+        os.environ.setdefault("ANONYMIZED_TELEMETRY", "false")
+        os.environ.setdefault("CHROMA_TELEMETRY", "false")
+      _client = chromadb.PersistentClient(path=chroma_path)
     _collection = _client.get_or_create_collection(name="event_sources")
     return _collection
   except Exception:
@@ -99,6 +110,7 @@ def retrieve(query: str, lang: str, top_k: int = 5) -> Tuple[List[Dict[str, Any]
     results = collection.query(
       query_embeddings=[embedding],
       n_results=top_k,
+      where={"lang": lang},
       include=["documents", "metadatas", "distances"]
     )
   except Exception:

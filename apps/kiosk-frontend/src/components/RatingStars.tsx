@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { useLang } from "../hooks/useLang";
 
 export function RatingStars({ onSubmit }: { onSubmit: (rating: number) => void }) {
+  const { t } = useLang();
   const [selected, setSelected] = useState(0);
   return (
     <div className="flex items-center gap-2">
@@ -18,7 +20,7 @@ export function RatingStars({ onSubmit }: { onSubmit: (rating: number) => void }
         disabled={selected === 0}
         onClick={() => onSubmit(selected)}
       >
-        Submit
+        {t.submitButton}
       </button>
     </div>
   );

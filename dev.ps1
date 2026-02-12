@@ -24,7 +24,7 @@ Stop-Port 8006
 Start-Process powershell -ArgumentList @(
   "-NoExit",
   "-Command",
-  "Set-Location '$backendDir'; .\.venv\Scripts\Activate.ps1; python -m uvicorn app.main:app --reload --port 8006 --env-file '$envFile'"
+  "Set-Location '$backendDir'; .\.venv\Scripts\Activate.ps1; python -m uvicorn app.app:app --reload --port 8006 --env-file '$envFile'"
 )
 
 Start-Process powershell -ArgumentList @(

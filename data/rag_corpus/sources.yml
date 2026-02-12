@@ -9,11 +9,11 @@
 
   - id: mhf_forum_program_ar
     title: "برنامج منتدى مكة للحلال (AR)"
-    url_or_path: "data/rag_corpus/pdfs/MHF_AR.pdf"
+    url_or_path: "data/rag_corpus/texts/MHF_AR.txt"
     lang: "AR"
-    type: "pdf"
+    type: "txt"
     approved_by: "ICHS event team"
-    approved_date: "2026-02-10"
+    approved_date: "2026-02-12"
 
   - id: mhf_forum_program_fr
     title: "Programme du Makkah Halal Forum (FR)"
@@ -43,14 +43,6 @@
     title: "Guide des lieux emblématiques de la Mecque (FR)"
     url_or_path: "data/rag_corpus/pdfs/MHF_Landmarks_FR.pdf"
     lang: "FR"
-    type: "pdf"
-    approved_by: "ICHS event team"
-    approved_date: "2026-02-10"
-
-  - id: floor_plan_en
-    title: "Event Floor Plan (EN)"
-    url_or_path: "data/rag_corpus/pdfs/Floor_Plan_EN.pdf"
-    lang: "EN"
     type: "pdf"
     approved_by: "ICHS event team"
     approved_date: "2026-02-10"

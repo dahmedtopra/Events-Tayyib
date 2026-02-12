@@ -64,7 +64,7 @@ export function GuidePage() {
           </div>
         </section>
         <aside className="rounded-xl border border-amber-200 bg-white/70 p-4">
-          <TayyibPanel state={forcedState ?? state} variant="compact" />
+          <TayyibPanel state={forcedState ?? state} variant="compact" objectPosition="50% 8%" />
         </aside>
       </div>
     </KioskLayout>

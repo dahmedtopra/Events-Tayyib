@@ -7,7 +7,7 @@ from typing import Any, Dict, Generator, List
 import requests
 from datetime import datetime, timezone, timedelta
 
-from app.db.sqlite import insert_analytics
+from app.db.sqlite import consume_session_user_message_slot, insert_analytics
 from app.schemas.chat import ChatRequest, ChatResponseMeta, ChatSourceItem
 from app.services.ask_service import (
   is_out_of_scope,
@@ -23,6 +23,7 @@ RAG_THRESHOLD = 0.35
 MIN_SOURCES = 1
 MIN_SOURCE_SCORE = 0.2
 MAX_HISTORY_MESSAGES = 10
+DEFAULT_MAX_MESSAGES_PER_SESSION = 15
 
 _QUESTION_WORDS = {
   "how", "what", "where", "when", "why", "who", "which",
@@ -56,8 +57,49 @@ def _verified_only_message(lang: str) -> str:
   if lang == "AR":
     return "لم أجد إجابة موثقة في مستندات الفعالية الرسمية. اختر سؤالا أدق أو راجع مكتب المعلومات."
   if lang == "FR":
-    return "Je n'ai pas trouve de reponse verifiee dans les documents officiels de l'evenement. Reformulez votre question ou consultez le bureau d'information."
+    return "Je n'ai pas trouvé de réponse vérifiée dans les documents officiels de l'événement. Reformulez votre question ou consultez le bureau d'information."
   return "I couldn't verify this in the official event documents. Please ask a more specific question or check with the information desk."
+
+
+def _max_messages_per_session() -> int:
+  raw = os.getenv("MAX_MESSAGES_PER_SESSION", str(DEFAULT_MAX_MESSAGES_PER_SESSION)).strip()
+  try:
+    val = int(raw)
+    return val if val > 0 else DEFAULT_MAX_MESSAGES_PER_SESSION
+  except Exception:
+    return DEFAULT_MAX_MESSAGES_PER_SESSION
+
+
+def _session_limit_message(limit: int, lang: str) -> str:
+  if lang == "AR":
+    return f"وصلت هذه الجلسة إلى الحد الأقصى ({limit} رسالة). اضغط على إنهاء الجلسة لبدء جلسة جديدة."
+  if lang == "FR":
+    return f"Cette session a atteint la limite ({limit} messages). Appuyez sur Fin de session pour en démarrer une nouvelle."
+  return f"This session reached the limit ({limit} messages). Tap End Session to start a new session."
+
+
+def _empty_query_message(lang: str) -> str:
+  if lang == "AR":
+    return "اسألني سؤالاً عن الفعالية!"
+  if lang == "FR":
+    return "Posez-moi une question sur l'événement !"
+  return "Please ask me a question about the event!"
+
+
+def _vague_query_message(lang: str) -> str:
+  if lang == "AR":
+    return "أود مساعدتك. هل يمكنك تحديد سؤالك بشكل أدق؟"
+  if lang == "FR":
+    return "Je souhaite vous aider. Pourriez-vous préciser votre question ?"
+  return "I'd like to help with that. Could you be a bit more specific?"
+
+
+def _error_message(lang: str) -> str:
+  if lang == "AR":
+    return "عذراً، لم أتمكن من إتمام هذا الطلب. يرجى المحاولة مرة أخرى."
+  if lang == "FR":
+    return "Désolé, je n'ai pas pu traiter cette demande. Veuillez réessayer."
+  return "I'm sorry, I couldn't complete that request. Please try again."
 
 
 def _sse_token(text: str) -> str:
@@ -146,7 +188,7 @@ def _offline_to_prose(match: Dict[str, Any], lang: str) -> str:
     if lang == "AR":
       parts.append("## الإجابة المباشرة")
     elif lang == "FR":
-      parts.append("## Reponse directe")
+      parts.append("## Réponse directe")
     else:
       parts.append("## Direct Answer")
     parts.append(answer["direct"])
@@ -156,7 +198,7 @@ def _offline_to_prose(match: Dict[str, Any], lang: str) -> str:
     if lang == "AR":
       parts.append("## الخطوات")
     elif lang == "FR":
-      parts.append("## Etapes")
+      parts.append("## Étapes")
     else:
       parts.append("## Steps")
     parts.append("\n".join(f"- {s}" for s in steps))
@@ -166,7 +208,7 @@ def _offline_to_prose(match: Dict[str, Any], lang: str) -> str:
     if lang == "AR":
       parts.append("## أخطاء شائعة")
     elif lang == "FR":
-      parts.append("## Erreurs courantes a eviter")
+      parts.append("## Erreurs courantes à éviter")
     else:
       parts.append("## Common Mistakes")
     parts.append("\n".join(f"- {m}" for m in mistakes))
@@ -247,7 +289,7 @@ def stream_chat_response(payload: ChatRequest) -> Generator[str, None, None]:
 
   try:
     if not payload.messages:
-      yield from _yield_text_as_tokens("Please ask me a question about the event!")
+      yield from _yield_text_as_tokens(_empty_query_message(payload.lang))
       yield _sse_meta(ChatResponseMeta(
         sources=[],
         confidence=0.0,
@@ -263,7 +305,7 @@ def stream_chat_response(payload: ChatRequest) -> Generator[str, None, None]:
         latest_msg = msg
         break
     if not latest_msg:
-      yield from _yield_text_as_tokens("Please ask me a question about the event!")
+      yield from _yield_text_as_tokens(_empty_query_message(payload.lang))
       yield _sse_meta(ChatResponseMeta(
         sources=[],
         confidence=0.0,
@@ -274,6 +316,32 @@ def stream_chat_response(payload: ChatRequest) -> Generator[str, None, None]:
       return
 
     latest_query = latest_msg.content
+    max_messages = _max_messages_per_session()
+    allowed, _ = consume_session_user_message_slot(payload.session_id, max_messages)
+    if not allowed:
+      limit_text = _session_limit_message(max_messages, payload.lang)
+      yield from _yield_text_as_tokens(limit_text)
+      latency_ms = int((time.time() - start) * 1000)
+      yield _sse_meta(ChatResponseMeta(
+        sources=[],
+        confidence=0.0,
+        refinement_chips=[],
+        route_used="fallback",
+        latency_ms=latency_ms,
+        clarifying_question=limit_text,
+        error_code="session_limit_reached",
+      ))
+      _log_analytics(
+        payload,
+        "fallback",
+        0.0,
+        0,
+        "session_limit_reached",
+        latency_ms,
+        latest_query,
+      )
+      return
+
     rag_query = _effective_query(payload.messages, latest_query)
 
     if is_out_of_scope(latest_query):
@@ -327,7 +395,7 @@ def stream_chat_response(payload: ChatRequest) -> Generator[str, None, None]:
     else:
       is_first_message = len(payload.messages) <= 1
       if is_first_message and _is_vague_query(latest_query):
-        clarify_text = "I'd like to help with that. Could you be a bit more specific?"
+        clarify_text = _vague_query_message(payload.lang)
         yield from _yield_text_as_tokens(clarify_text)
         route_used = "fallback"
         clarifying_question = clarify_text
@@ -354,7 +422,7 @@ def stream_chat_response(payload: ChatRequest) -> Generator[str, None, None]:
 
   except Exception:
     logging.exception("chat stream error")
-    error_msg = "I'm sorry, I couldn't complete that request. Please try again."
+    error_msg = _error_message(payload.lang)
     yield from _yield_text_as_tokens(error_msg)
     latency_ms = int((time.time() - start) * 1000)
     yield _sse_meta(ChatResponseMeta(

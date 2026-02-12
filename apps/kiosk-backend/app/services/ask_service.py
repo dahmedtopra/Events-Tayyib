@@ -54,7 +54,13 @@ def get_last_openai_error() -> Dict[str, str]:
   return _last_openai_error
 
 
-def safe_response() -> AskResponse:
+def safe_response(lang: str = "EN") -> AskResponse:
+  if lang == "AR":
+    msg = "لم أتمكن من إتمام هذا الطلب. يرجى المحاولة مرة أخرى أو إعادة الصياغة."
+  elif lang == "FR":
+    msg = "Je n'ai pas pu traiter cette demande. Veuillez réessayer ou reformuler."
+  else:
+    msg = "I couldn't complete that request. Please try again or rephrase."
   return AskResponse(
     answer=AnswerBlock(direct="", steps=[], mistakes=[]),
     sources=[],
@@ -62,7 +68,7 @@ def safe_response() -> AskResponse:
     refinement_chips=[],
     route_used="fallback",
     latency_ms=0,
-    clarifying_question="I couldn't complete that request. Please try again or rephrase.",
+    clarifying_question=msg,
     error_code="ask_error",
     error_message="The request could not be completed.",
     debug_notes="fallback: exception",
@@ -79,10 +85,10 @@ def clarifier(query: str, lang: str) -> str:
     return "هل تقصد جدول الفعالية، أم تفاصيل الجلسات، أم معلومات المتحدثين، أم التسجيل؟"
   if lang == "FR":
     if "session" in q:
-      return "Parlez-vous d'une session specifique, du programme des sessions, ou des details d'inscription ?"
+      return "Parlez-vous d'une session spécifique, du programme des sessions, ou des détails d'inscription ?"
     if "speaker" in q or "intervenant" in q:
       return "Parlez-vous du profil de l'intervenant, de son horaire, ou du sujet de sa session ?"
-    return "Parlez-vous du programme, des details de session, des intervenants, ou de l'inscription ?"
+    return "Parlez-vous du programme, des détails de session, des intervenants, ou de l'inscription ?"
   if "session" in q:
     return "Do you mean a specific session, the session schedule, or registration details?"
   if "speaker" in q:
@@ -100,10 +106,10 @@ def clarifier_options(query: str, lang: str) -> List[str]:
     return ["جدول الفعالية", "معلومات الجلسات", "مساعدة التسجيل"]
   if lang == "FR":
     if "session" in q:
-      return ["Programme des sessions", "Details de la session", "Horaire de la session"]
+      return ["Programme des sessions", "Détails de la session", "Horaire de la session"]
     if "speaker" in q or "intervenant" in q:
       return ["Profil de l'intervenant", "Horaire de session", "Sujet de session"]
-    return ["Programme de l'evenement", "Infos sessions", "Aide a l'inscription"]
+    return ["Programme de l'événement", "Infos sessions", "Aide à l'inscription"]
   if "session" in q:
     return ["Session schedule", "Session details", "Session timing"]
   if "speaker" in q:
@@ -143,7 +149,7 @@ def insufficient_grounding_message(lang: str) -> str:
   if lang == "AR":
     return "لم أجد إجابة موثقة في مستندات الفعالية الرسمية. اختر سؤالا أدق أو راجع مكتب المعلومات."
   if lang == "FR":
-    return "Je n'ai pas trouve de reponse verifiee dans les documents officiels de l'evenement. Reformulez votre question ou consultez le bureau d'information."
+    return "Je n'ai pas trouvé de réponse vérifiée dans les documents officiels de l'événement. Reformulez votre question ou consultez le bureau d'information."
   return "I couldn't verify this in the official event documents. Please ask a more specific question or check with the information desk."
 
 
@@ -163,12 +169,14 @@ def suggestion_chips(query: str, lang: str, retrieved_sources: List[Dict[str, An
 
 
 def build_prompt(query: str, lang: str, sources: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+  lang_name = {"EN": "English", "AR": "Arabic", "FR": "French"}.get(lang, "English")
   snippets = "\n\n".join(
     f"Title: {s.get('title', '')}\nURL: {s.get('url_or_path', '')}\nSnippet: {s.get('snippet', '')}"
     for s in sources
   )
   system_text = (
     f"You are an event kiosk assistant. Current date/time in Makkah: {_now_makkah()}.\n"
+    f"Respond in {lang_name}.\n"
     "Use only the provided snippets. "
     "Stay factual and helpful. "
     "Do not include inline source tags like [Source 1] in the answer text. "
@@ -426,7 +434,7 @@ def answer_query(payload: AskRequest) -> AskResponse:
             )
   except Exception:
     logging.exception("/api/ask failed")
-    response = safe_response()
+    response = safe_response(payload.lang)
   finally:
     latency_ms = int((time.time() - start) * 1000)
     response.latency_ms = latency_ms

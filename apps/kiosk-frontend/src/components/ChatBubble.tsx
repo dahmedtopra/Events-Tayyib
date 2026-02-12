@@ -26,14 +26,14 @@ function normalizeStructuredText(content: string, lang: "EN" | "AR" | "FR"): str
     lang === "AR"
       ? { direct: "الإجابة المباشرة", steps: "الخطوات", mistakes: "اخطاء شائعة" }
       : lang === "FR"
-        ? { direct: "Reponse directe", steps: "Etapes", mistakes: "Erreurs courantes" }
+        ? { direct: "Réponse directe", steps: "Étapes", mistakes: "Erreurs courantes" }
         : { direct: "Direct Answer", steps: "Steps", mistakes: "Common Mistakes" };
 
   let normalized = content.trim();
 
   // Strip bold markers from section labels so they match the patterns below
   normalized = normalized.replace(
-    /\*\*(Direct Answer|Answer|Steps?|Common Mistakes|Reponse directe|Etapes|Erreurs courantes)\*\*/gi,
+    /\*\*(Direct Answer|Answer|Steps?|Common Mistakes|R[eé]ponse directe|[EÉ]tapes|Erreurs courantes)\*\*/gi,
     "$1",
   );
 
@@ -43,9 +43,9 @@ function normalizeStructuredText(content: string, lang: "EN" | "AR" | "FR"): str
     .replace(/(^|\n)\s*(Answer)\s*:\s*/gi, `\n## ${labels.direct}\n`)
     .replace(/(^|\n)\s*(Steps?|Step-by-step)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.steps}\n`)
     .replace(/(^|\n)\s*(Common Mistakes|Mistakes to avoid)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.mistakes}\n`)
-    .replace(/(^|\n)\s*(Reponse directe)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.direct}\n`)
-    .replace(/(^|\n)\s*(Etapes)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.steps}\n`)
-    .replace(/(^|\n)\s*(Erreurs courantes)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.mistakes}\n`);
+    .replace(/(^|\n)\s*(R[eé]ponse directe)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.direct}\n`)
+    .replace(/(^|\n)\s*([EÉ]tapes)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.steps}\n`)
+    .replace(/(^|\n)\s*(Erreurs courantes[^\n]*)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.mistakes}\n`);
 
   if (/^#{1,3}\s+/m.test(normalized)) {
     return normalized.trim();
@@ -80,6 +80,7 @@ function formatMessageContent(content: string, lang: "EN" | "AR" | "FR"): string
   const htmlParts: string[] = [];
   let inUl = false;
   let inOl = false;
+  const listPad = lang === "AR" ? "pr-5" : "pl-5";
 
   const closeLists = () => {
     if (inUl) {
@@ -114,7 +115,7 @@ function formatMessageContent(content: string, lang: "EN" | "AR" | "FR"): string
         inOl = false;
       }
       if (!inUl) {
-        htmlParts.push('<ul class="list-disc pl-5 my-1 space-y-1">');
+        htmlParts.push(`<ul class="list-disc ${listPad} my-1 space-y-1">`);
         inUl = true;
       }
       htmlParts.push(`<li>${inlineFormat(bulletMatch[1])}</li>`);
@@ -128,7 +129,7 @@ function formatMessageContent(content: string, lang: "EN" | "AR" | "FR"): string
         inUl = false;
       }
       if (!inOl) {
-        htmlParts.push('<ol class="list-decimal pl-5 my-1 space-y-1">');
+        htmlParts.push(`<ol class="list-decimal ${listPad} my-1 space-y-1">`);
         inOl = true;
       }
       htmlParts.push(`<li>${inlineFormat(numberedMatch[1])}</li>`);
@@ -203,7 +204,7 @@ export function ChatBubble({ message, isRTL, lang, onChipClick, onSourcesClick, 
           </div>
         )}
 
-        <div className="bubble-text type-body text-[0.95rem] leading-7 tracking-[0.01em] text-balance [&>p]:my-2 [&>p:first-child]:mt-0 [&>p:last-child]:mb-0 [&_ul]:my-2 [&_ul]:space-y-1.5 [&_ol]:my-2 [&_ol]:space-y-1.5 [&_li]:pl-0.5 [&_strong]:font-semibold [&_strong]:text-emerald-900 [&_em]:text-emerald-800/90">
+        <div dir={isRTL ? "rtl" : "ltr"} className={`bubble-text type-body text-[0.95rem] leading-7 tracking-[0.01em] text-balance [&>p]:my-2 [&>p:first-child]:mt-0 [&>p:last-child]:mb-0 [&_ul]:my-2 [&_ul]:space-y-1.5 [&_ol]:my-2 [&_ol]:space-y-1.5 ${isRTL ? "[&_li]:pr-0.5" : "[&_li]:pl-0.5"} [&_strong]:font-semibold [&_strong]:text-emerald-900 [&_em]:text-emerald-800/90`}>
           <span dangerouslySetInnerHTML={{ __html: formatMessageContent(message.content, lang) }} />
           {message.isStreaming && <span className="inline-block w-0.5 h-4 bg-emerald-600 animate-pulse ml-0.5 align-text-bottom" />}
         </div>

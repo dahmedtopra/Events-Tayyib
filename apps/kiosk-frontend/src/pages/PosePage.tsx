@@ -47,7 +47,7 @@ export function PosePage() {
           </div>
         </section>
         <aside className="rounded-3xl border border-gold-200 bg-white/70 p-4">
-          <TayyibPanel state={effectiveState} variant={isVertical ? "hero" : "compact"} />
+          <TayyibPanel state={effectiveState} variant={isVertical ? "hero" : "compact"} objectPosition="50% 8%" />
         </aside>
       </div>
     </KioskLayout>

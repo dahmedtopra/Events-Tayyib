@@ -22,7 +22,7 @@
 - Keep versions flexible unless breakage occurs.
 
 ## Run Commands
-- `uvicorn app.main:app --reload --port 8005`
+- `uvicorn app.app:app --reload --port 8005`
 - Ingest (from repo root):
   - `python scripts/ingest_sources.py --reset`
   - Or using backend venv: `apps/kiosk-backend/.venv/Scripts/python.exe scripts/ingest_sources.py --reset`

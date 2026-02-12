@@ -26,6 +26,14 @@ CREATE TABLE IF NOT EXISTS analytics (
 );
 """
 
+SESSION_COUNTER_SCHEMA_SQL = """
+CREATE TABLE IF NOT EXISTS session_message_counts (
+  session_id TEXT PRIMARY KEY,
+  user_messages_count INTEGER NOT NULL DEFAULT 0,
+  updated_ts TEXT NOT NULL
+);
+"""
+
 
 def get_sqlite_path() -> str:
   return os.getenv("SQLITE_PATH", default_sqlite_path())
@@ -37,6 +45,7 @@ def init_db() -> None:
   conn = sqlite3.connect(path)
   try:
     conn.execute(SCHEMA_SQL)
+    conn.execute(SESSION_COUNTER_SCHEMA_SQL)
     # best-effort add missing columns
     for col_def in [
       "lang TEXT",
@@ -49,6 +58,46 @@ def init_db() -> None:
       except Exception:
         pass
     conn.commit()
+  finally:
+    conn.close()
+
+
+def consume_session_user_message_slot(session_id: str, max_messages: int) -> tuple[bool, int]:
+  """
+  Atomically consume one attendee/user message slot for a session.
+  Returns (allowed, current_count).
+  """
+  limit = max_messages if isinstance(max_messages, int) and max_messages > 0 else 15
+  now = datetime.utcnow().isoformat() + "Z"
+  key = (session_id or "").strip() or "unknown-session"
+
+  conn = sqlite3.connect(get_sqlite_path())
+  try:
+    conn.execute(SESSION_COUNTER_SCHEMA_SQL)
+    conn.execute(
+      """
+      INSERT OR IGNORE INTO session_message_counts (session_id, user_messages_count, updated_ts)
+      VALUES (?, 0, ?)
+      """,
+      (key, now)
+    )
+    cur = conn.execute(
+      """
+      UPDATE session_message_counts
+      SET user_messages_count = user_messages_count + 1,
+          updated_ts = ?
+      WHERE session_id = ?
+        AND user_messages_count < ?
+      """,
+      (now, key, limit)
+    )
+    row = conn.execute(
+      "SELECT user_messages_count FROM session_message_counts WHERE session_id = ?",
+      (key,)
+    ).fetchone()
+    conn.commit()
+    count = int(row[0]) if row else 0
+    return cur.rowcount == 1, count
   finally:
     conn.close()
 

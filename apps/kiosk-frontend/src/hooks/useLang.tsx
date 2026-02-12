@@ -66,6 +66,14 @@ type Dict = {
   feedbackMoreQuestion: string;
   feedbackYesThumb: string;
   feedbackNoThumb: string;
+  endSession: string;
+  endButton: string;
+  closeButton: string;
+  submitButton: string;
+  pageAbbr: string;
+  pagesAbbr: string;
+  noAnswerText: string;
+  sessionLimitFallback: string;
 };
 
 type LangContextValue = {
@@ -91,8 +99,8 @@ const DICT: Record<Lang, Dict> = {
     quickChips: [
       "Event schedule",
       "Session info",
-      "Speaker lineup",
-      "Registration help"
+      "Exhibition & B2B",
+      "Venue info"
     ],
     askTitle: "Ask (Chat + Sources)",
     guideTitle: "Guide (Wizard)",
@@ -135,8 +143,8 @@ const DICT: Record<Lang, Dict> = {
     trendingTitle: "Trending questions",
     trendingQuestions: [
       "What sessions are happening today?",
-      "Who are today's speakers?",
-      "How do I register for a workshop?",
+      "Where is the exhibition?",
+      "When are the masterclasses?",
       "What time does the event start?"
     ],
     serviceUnavailable: "Service unavailable. Please try again.",
@@ -147,7 +155,15 @@ const DICT: Record<Lang, Dict> = {
     feedbackHelpQuestion: "Did that answer help you?",
     feedbackMoreQuestion: "Is there anything else about the event I can help with?",
     feedbackYesThumb: "Yes",
-    feedbackNoThumb: "No"
+    feedbackNoThumb: "No",
+    endSession: "End Session",
+    endButton: "End",
+    closeButton: "Close",
+    submitButton: "Submit",
+    pageAbbr: "p.",
+    pagesAbbr: "pp.",
+    noAnswerText: "(No answer text returned)",
+    sessionLimitFallback: "This session reached the limit (15 messages). Tap End Session to start a new session."
   },
   AR: {
     greeting: "اسأل عن الجداول والجلسات والمتحدثين ومعلومات المكان",
@@ -165,8 +181,8 @@ const DICT: Record<Lang, Dict> = {
     quickChips: [
       "جدول الفعالية",
       "معلومات الجلسات",
-      "قائمة المتحدثين",
-      "مساعدة التسجيل"
+      "المعرض واجتماعات الأعمال",
+      "معلومات المكان"
     ],
     askTitle: "اسأل (محادثة + مصادر)",
     guideTitle: "الدليل (خطوات)",
@@ -209,8 +225,8 @@ const DICT: Record<Lang, Dict> = {
     trendingTitle: "أسئلة شائعة",
     trendingQuestions: [
       "ما الجلسات المقامة اليوم؟",
-      "من هم المتحدثون اليوم؟",
-      "كيف أسجّل في ورشة عمل؟",
+      "أين يقام المعرض؟",
+      "متى تبدأ ورش العمل؟",
       "متى تبدأ الفعالية؟"
     ],
     serviceUnavailable: "الخدمة غير متاحة حاليا. حاول مرة أخرى.",
@@ -221,41 +237,49 @@ const DICT: Record<Lang, Dict> = {
     feedbackHelpQuestion: "هل كانت هذه الإجابة مفيدة؟",
     feedbackMoreQuestion: "هل هناك أي شيء آخر عن الفعالية يمكنني مساعدتك به؟",
     feedbackYesThumb: "نعم",
-    feedbackNoThumb: "لا"
+    feedbackNoThumb: "لا",
+    endSession: "إنهاء الجلسة",
+    endButton: "إنهاء",
+    closeButton: "إغلاق",
+    submitButton: "تقديم",
+    pageAbbr: "ص.",
+    pagesAbbr: "ص.",
+    noAnswerText: "(لم يتم إرجاع نص الإجابة)",
+    sessionLimitFallback: "وصلت هذه الجلسة إلى الحد الأقصى (15 رسالة). اضغط على إنهاء الجلسة لبدء جلسة جديدة."
   },
   FR: {
     greeting: "Posez des questions sur les horaires, sessions, intervenants et le lieu",
-    attractPrompt: "Guide officiel de l'evenement, pret a aider.",
+    attractPrompt: "Guide officiel de l'événement, prêt à aider.",
     tapToStart: "Touchez pour commencer",
     chooseLanguage: "Choisir la langue",
     searchReadyPrompt: "Touchez un sujet ou saisissez une question",
-    scopeBanner: "Guide evenementiel uniquement; pas de conseils juridiques ou medicaux. Consultez les organisateurs officiels pour les decisions importantes.",
-    noPersonalData: "N'entrez aucune donnee personnelle.",
-    searchPlaceholder: "Rechercher des infos sur l'evenement...",
+    scopeBanner: "Guide événementiel uniquement ; pas de conseils juridiques ou médicaux. Consultez les organisateurs officiels pour les décisions importantes.",
+    noPersonalData: "N'entrez aucune donnée personnelle.",
+    searchPlaceholder: "Rechercher des infos sur l'événement...",
     searchButton: "Rechercher",
     clearButton: "Effacer",
     poseCta: "Pose avec le Guide",
-    searchingStages: ["Recherche des sources…", "Lecture…", "Redaction…"],
+    searchingStages: ["Recherche des sources…", "Lecture…", "Rédaction…"],
     quickChips: [
-      "Programme de l'evenement",
+      "Programme de l'événement",
       "Infos sessions",
-      "Liste des intervenants",
-      "Aide a l'inscription"
+      "Exposition & B2B",
+      "Infos lieu"
     ],
     askTitle: "Demander (Chat + Sources)",
     guideTitle: "Guide (Assistant)",
     poseTitle: "Mode Pose",
     shareTitle: "Partager la checklist",
-    directAnswer: "Reponse directe",
-    steps: "Etapes",
+    directAnswer: "Réponse directe",
+    steps: "Étapes",
     mistakes: "Erreurs courantes",
     followupTitle: "Question de suivi",
-    clarifyTitle: "Precisez votre question",
-    feedbackPrompt: "Notez cette reponse",
+    clarifyTitle: "Précisez votre question",
+    feedbackPrompt: "Notez cette réponse",
     thanksMessage: "Merci pour votre avis.",
-    groundedLabel: "Fonde sur des sources officielles",
-    limitedSources: "Sources limitees",
-    generalDisclaimer: "Conseils generaux (non issus des documents officiels). Verifiez aupres des organisateurs officiels pour les details critiques.",
+    groundedLabel: "Fondé sur des sources officielles",
+    limitedSources: "Sources limitées",
+    generalDisclaimer: "Conseils généraux (non issus des documents officiels). Vérifiez auprès des organisateurs officiels pour les détails critiques.",
     showMore: "Afficher plus",
     showLess: "Afficher moins",
     localSource: "Source locale",
@@ -264,38 +288,46 @@ const DICT: Record<Lang, Dict> = {
     floorPlanTitle: "Plan des lieux",
     floorPlanUnavailable: "Si la carte ne s'affiche pas, ouvrez le PDF directement.",
     poseTap: "Touchez pour changer la pose",
-    countdownToggle: "Basculer le compte a rebours",
-    moreDetails: "Plus de details",
+    countdownToggle: "Basculer le compte à rebours",
+    moreDetails: "Plus de détails",
     sources: "Sources",
-    wizardTitle: "Etapes du guide",
+    wizardTitle: "Étapes du guide",
     checklistTitle: "Checklist",
     qrPlaceholder: "Zone QR (placeholder)",
     poseFrame: "Cadre de pose",
-    countdown: "Compte a rebours",
+    countdown: "Compte à rebours",
     watermark: "Filigrane ICHS",
-    checklistLoaded: "Checklist chargee (placeholder)",
-    checklistMissing: "Aucune donnees de checklist",
-    footerDisclaimer: "Informations uniquement. Pas de conseils juridiques ou medicaux.",
-    headerTitle: "Guide IA Evenement",
+    checklistLoaded: "Checklist chargée (placeholder)",
+    checklistMissing: "Aucune donnée de checklist",
+    footerDisclaimer: "Informations uniquement. Pas de conseils juridiques ou médicaux.",
+    headerTitle: "Guide IA Événement",
     modePlaceholder: "Mode : placeholder",
     languageLabel: "Langue",
     homeSearchLabel: "Recherche",
     trendingTitle: "Questions tendances",
     trendingQuestions: [
       "Quelles sessions ont lieu aujourd'hui ?",
-      "Qui sont les intervenants d'aujourd'hui ?",
-      "Comment s'inscrire a un atelier ?",
-      "A quelle heure commence l'evenement ?"
+      "Où se trouve l'exposition ?",
+      "Quand sont les masterclasses ?",
+      "À quelle heure commence l'événement ?"
     ],
-    serviceUnavailable: "Service indisponible. Veuillez reessayer.",
-    tryAgain: "Reessayer",
+    serviceUnavailable: "Service indisponible. Veuillez réessayer.",
+    tryAgain: "Réessayer",
     chatPlaceholder: "Tapez votre message...",
     sendButton: "Envoyer",
-    tayyibTyping: "Le Guide ecrit...",
-    feedbackHelpQuestion: "Cette reponse vous a-t-elle aide ?",
-    feedbackMoreQuestion: "Y a-t-il autre chose sur l'evenement avec laquelle je peux vous aider ?",
+    tayyibTyping: "Le Guide écrit...",
+    feedbackHelpQuestion: "Cette réponse vous a-t-elle aidé ?",
+    feedbackMoreQuestion: "Y a-t-il autre chose sur l'événement avec laquelle je peux vous aider ?",
     feedbackYesThumb: "Oui",
-    feedbackNoThumb: "Non"
+    feedbackNoThumb: "Non",
+    endSession: "Fin de session",
+    endButton: "Fin",
+    closeButton: "Fermer",
+    submitButton: "Soumettre",
+    pageAbbr: "p.",
+    pagesAbbr: "p.",
+    noAnswerText: "(Aucun texte de réponse retourné)",
+    sessionLimitFallback: "Cette session a atteint la limite (15 messages). Appuyez sur Fin de session pour en démarrer une nouvelle."
   }
 };
 

@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { fetchJSON, fetchSSE, API_BASE_URL } from "../api/client";
 import { TayyibPanel } from "./TayyibPanel";
 import { IntroWave } from "./IntroWave";
@@ -15,7 +15,6 @@ import type { TayyibState } from "../tayyib/loops";
 
 type FlowState =
   | "ATTRACT"
-  | "LANGUAGE_PICK"
   | "INTRO_WAVE"
   | "SEARCH_READY"
   | "CHAT"
@@ -49,6 +48,15 @@ const SESSION_ID_KEY = "session_id";
 const SESSION_START_KEY = "session_start";
 const LANG_LOCK_KEY = "kiosk_lang_locked";
 const INACTIVITY_MS = 60000;
+// Session limit fallback is now language-aware via t.sessionLimitFallback
+const FLOOR_PLAN_IMAGE_CANDIDATES = [
+  "/assets/floorplan/Floor-Plan_EN.jpg",
+  "/assets/floorplan/Floor_Plan_EN.jpg",
+  "/assets/Floor_Plan_EN.jpg",
+];
+const MAP_MIN_ZOOM = 1;
+const MAP_MAX_ZOOM = 4;
+const MAP_ZOOM_STEP = 0.25;
 
 export function KioskFlow() {
   const { t, lang, setLang } = useLang();
@@ -68,32 +76,127 @@ export function KioskFlow() {
   const [lastConfidence, setLastConfidence] = useState<number | null>(null);
   const [sourcesDrawerOpen, setSourcesDrawerOpen] = useState(false);
   const [activeSources, setActiveSources] = useState<ChatMessage["sources"]>([]);
-  const [floorPlanOpen, setFloorPlanOpen] = useState(false);
+const [floorPlanOpen, setFloorPlanOpen] = useState(false);
+  const [floorPlanImageIdx, setFloorPlanImageIdx] = useState(0);
+  const [floorPlanImageFailed, setFloorPlanImageFailed] = useState(false);
+  const [mapNatural, setMapNatural] = useState({ w: 0, h: 0 });
+  const [mapViewport, setMapViewport] = useState({ w: 0, h: 0 });
+  const [mapZoom, setMapZoom] = useState(1);
+  const [mapPan, setMapPan] = useState({ x: 0, y: 0 });
+  const [isMapDragging, setIsMapDragging] = useState(false);
+  const [sessionLimitReached, setSessionLimitReached] = useState(false);
+  const [sessionLimitMessage, setSessionLimitMessage] = useState(t.sessionLimitFallback);
 
   // Logo compact animation (synced with IntroWave)
   const [logoCompacting, setLogoCompacting] = useState(false);
 
   // Refs
   const lastInteractionRef = useRef(Date.now());
-  const abortRef = useRef<AbortController | null>(null);
+const abortRef = useRef<AbortController | null>(null);
+  const mapViewportRef = useRef<HTMLDivElement | null>(null);
+  const mapDragRef = useRef({
+    active: false,
+    pointerId: -1,
+    startX: 0,
+    startY: 0,
+    originX: 0,
+    originY: 0,
+  });
 
-  const isDebug = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("debug") === "1";
-  const floorPlanPdfUrl = "/assets/floorplan/Floor_Plan_EN.pdf";
+const isDebug = typeof window !== "undefined" && new URLSearchParams(window.location.search).get("debug") === "1";
+  const floorPlanImageUrl = FLOOR_PLAN_IMAGE_CANDIDATES[floorPlanImageIdx];
 
   // Prevent loops - track if component is mounted
   const isMountedRef = useRef(false);
+
+  const ensureSessionId = () => {
+    let sid = sessionStorage.getItem(SESSION_ID_KEY);
+    if (!sid) {
+      sid = crypto.randomUUID();
+      sessionStorage.setItem(SESSION_ID_KEY, sid);
+    }
+    if (!sessionStorage.getItem(SESSION_START_KEY)) {
+      sessionStorage.setItem(SESSION_START_KEY, Date.now().toString());
+    }
+return sid;
+  };
+
+  const mapBaseScale =
+    mapNatural.w > 0 && mapNatural.h > 0 && mapViewport.w > 0 && mapViewport.h > 0
+      ? Math.min(mapViewport.w / mapNatural.w, mapViewport.h / mapNatural.h)
+      : 1;
+
+  const clampMapPan = (x: number, y: number, zoomLevel = mapZoom) => {
+    if (!mapNatural.w || !mapNatural.h || !mapViewport.w || !mapViewport.h) {
+      return { x: 0, y: 0 };
+    }
+    const scale = mapBaseScale * zoomLevel;
+    const halfMapWidth = (mapNatural.w * scale) / 2;
+    const halfMapHeight = (mapNatural.h * scale) / 2;
+    const maxX = Math.max(0, halfMapWidth - mapViewport.w / 2);
+    const maxY = Math.max(0, halfMapHeight - mapViewport.h / 2);
+    return {
+      x: Math.min(maxX, Math.max(-maxX, x)),
+      y: Math.min(maxY, Math.max(-maxY, y)),
+    };
+  };
+
+  const resetMapView = () => {
+    setMapZoom(1);
+    setMapPan({ x: 0, y: 0 });
+  };
+
+  const updateMapZoom = (delta: number) => {
+    setMapZoom((prev) => {
+      const unclamped = prev + delta;
+      const next = Math.min(MAP_MAX_ZOOM, Math.max(MAP_MIN_ZOOM, Number(unclamped.toFixed(2))));
+      setMapPan((current) => clampMapPan(current.x, current.y, next));
+      return next;
+    });
+  };
+
+  const handleMapPointerDown = (e: ReactPointerEvent<HTMLDivElement>) => {
+    if (floorPlanImageFailed || !mapNatural.w || !mapNatural.h) return;
+    if (e.pointerType === "mouse" && e.button !== 0) return;
+    e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
+    mapDragRef.current = {
+      active: true,
+      pointerId: e.pointerId,
+      startX: e.clientX,
+      startY: e.clientY,
+      originX: mapPan.x,
+      originY: mapPan.y,
+    };
+    setIsMapDragging(true);
+  };
+
+  const handleMapPointerMove = (e: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = mapDragRef.current;
+    if (!drag.active || drag.pointerId !== e.pointerId) return;
+    const dx = e.clientX - drag.startX;
+    const dy = e.clientY - drag.startY;
+    setMapPan(clampMapPan(drag.originX + dx, drag.originY + dy));
+  };
+
+  const finishMapPointerDrag = (e: ReactPointerEvent<HTMLDivElement>) => {
+    const drag = mapDragRef.current;
+    if (drag.active && drag.pointerId === e.pointerId) {
+      try {
+        e.currentTarget.releasePointerCapture(e.pointerId);
+      } catch {
+      }
+    }
+    mapDragRef.current.active = false;
+    mapDragRef.current.pointerId = -1;
+    setIsMapDragging(false);
+  };
 
   // Initialize session
   useEffect(() => {
     if (isMountedRef.current) return;
     isMountedRef.current = true;
-
-    let sid = sessionStorage.getItem(SESSION_ID_KEY);
-    if (!sid) {
-      sid = crypto.randomUUID();
-      sessionStorage.setItem(SESSION_ID_KEY, sid);
-      sessionStorage.setItem(SESSION_START_KEY, Date.now().toString());
-    }
+    ensureSessionId();
   }, []);
 
   // Sync logo zoom-out with IntroWave (1500ms delay, same as INTRO_DURATION_MS)
@@ -103,11 +206,49 @@ export function KioskFlow() {
       return () => window.clearTimeout(timer);
     }
     setLogoCompacting(false);
-  }, [flow]);
+}, [flow]);
+
+  useEffect(() => {
+    if (!floorPlanOpen) return;
+
+    setFloorPlanImageFailed(false);
+    setFloorPlanImageIdx(0);
+    setMapNatural({ w: 0, h: 0 });
+    resetMapView();
+
+    const node = mapViewportRef.current;
+    if (!node) return;
+
+    const updateViewport = () => {
+      const rect = node.getBoundingClientRect();
+      setMapViewport({ w: rect.width, h: rect.height });
+    };
+
+    updateViewport();
+
+    let observer: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== "undefined") {
+      observer = new ResizeObserver(updateViewport);
+      observer.observe(node);
+    }
+
+    window.addEventListener("resize", updateViewport);
+    return () => {
+      window.removeEventListener("resize", updateViewport);
+      observer?.disconnect();
+      mapDragRef.current.active = false;
+      mapDragRef.current.pointerId = -1;
+      setIsMapDragging(false);
+    };
+  }, [floorPlanOpen]);
+
+  useEffect(() => {
+    setMapPan((current) => clampMapPan(current.x, current.y, mapZoom));
+  }, [mapNatural.w, mapNatural.h, mapViewport.w, mapViewport.h, mapZoom]);
 
   // Inactivity monitoring (only after language is locked)
   useEffect(() => {
-    if (flow === "ATTRACT" || flow === "LANGUAGE_PICK" || flow === "INTRO_WAVE" || flow === "RESET") {
+    if (flow === "ATTRACT" || flow === "INTRO_WAVE" || flow === "RESET") {
       return;
     }
 
@@ -145,11 +286,13 @@ export function KioskFlow() {
     setSourcesDrawerOpen(false);
     setFloorPlanOpen(false);
     setActiveSources([]);
+    setSessionLimitReached(false);
+    setSessionLimitMessage(t.sessionLimitFallback);
+    ensureSessionId();
     setTimeout(() => setFlow("ATTRACT"), 0);
   };
 
-  const ensureLangLock = (next: "EN" | "AR" | "FR") => {
-    setLang(next);
+  const startIntro = () => {
     sessionStorage.setItem(LANG_LOCK_KEY, "1");
     setFlow("INTRO_WAVE");
   };
@@ -160,7 +303,7 @@ export function KioskFlow() {
 
   const submitChat = async (override?: string) => {
     const q = (typeof override === "string" ? override : query).trim();
-    if (!q || isStreaming) return;
+    if (!q || isStreaming || sessionLimitReached) return;
 
     setQuery("");
 
@@ -185,7 +328,7 @@ export function KioskFlow() {
       {
         lang,
         messages: history,
-        session_id: sessionStorage.getItem(SESSION_ID_KEY) || "",
+        session_id: ensureSessionId(),
       },
       // onToken
       (token) => {
@@ -200,6 +343,7 @@ export function KioskFlow() {
         const route = meta.route_used as string;
         const confidence = meta.confidence as number;
         const general = meta.general_mode as boolean | undefined;
+        const errorCode = meta.error_code as string | undefined;
         const isClarifier = !!meta.clarifying_question;
 
         const updated = (prev: ChatMessage[]) =>
@@ -209,7 +353,11 @@ export function KioskFlow() {
               : m
           );
 
-        if (isClarifier) {
+        if (errorCode === "session_limit_reached") {
+          setMessages(updated);
+          setSessionLimitReached(true);
+          setSessionLimitMessage((meta.clarifying_question as string) || t.sessionLimitFallback);
+        } else if (isClarifier) {
           // Don't ask "was this helpful?" after a clarifying question
           setMessages(updated);
         } else {
@@ -253,7 +401,7 @@ export function KioskFlow() {
 
     // Submit to backend (thumbs up = 5, thumbs down = 2)
     try {
-      const session_id = sessionStorage.getItem(SESSION_ID_KEY) || "";
+      const session_id = ensureSessionId();
       const start = Number(sessionStorage.getItem(SESSION_START_KEY) || Date.now());
       const time_on_screen_ms = Date.now() - start;
       await fetchJSON("/api/feedback", {
@@ -301,6 +449,35 @@ export function KioskFlow() {
       <div className="h-full w-full relative flex items-center justify-center overflow-hidden"
         style={{ background: "linear-gradient(135deg, #0b4a3a 0%, #156f58 50%, #0f5a46 100%)" }}>
         {logoElement}
+
+        <div className="absolute left-8 top-32 z-[85]" dir="ltr">
+          <div className="grid grid-cols-3 gap-2 rounded-full bg-black/20 p-1 backdrop-blur-sm">
+            <button
+              className={`h-11 w-16 rounded-full text-sm font-semibold transition-colors ${
+                lang === "EN" ? "bg-gold-400 text-emerald-950" : "bg-white/20 text-white hover:bg-white/30"
+              }`}
+              onClick={() => setLang("EN")}
+            >
+              EN
+            </button>
+            <button
+              className={`h-11 w-16 rounded-full text-sm font-semibold transition-colors ${
+                lang === "AR" ? "bg-gold-400 text-emerald-950" : "bg-white/20 text-white hover:bg-white/30"
+              }`}
+              onClick={() => setLang("AR")}
+            >
+              AR
+            </button>
+            <button
+              className={`h-11 w-16 rounded-full text-sm font-semibold transition-colors ${
+                lang === "FR" ? "bg-gold-400 text-emerald-950" : "bg-white/20 text-white hover:bg-white/30"
+              }`}
+              onClick={() => setLang("FR")}
+            >
+              FR
+            </button>
+          </div>
+        </div>
 
         {/* Islamic geometry overlay */}
         <div className="islamic-geo" />
@@ -389,7 +566,7 @@ export function KioskFlow() {
 
             <AnimatedContent delay={1.2} duration={1} distance={20} threshold={0}>
               <div className="text-lg md:text-xl text-emerald-100">
-                Welcome • مرحباً • Bienvenue
+                  Welcome • مرحباً • Bienvenue
               </div>
             </AnimatedContent>
 
@@ -407,125 +584,13 @@ export function KioskFlow() {
                   <div className="absolute -inset-4 rounded-full border-2 border-gold-400/40 animate-pulse" style={{ pointerEvents: "none" }} />
                   <button
                     className="relative px-12 py-5 rounded-full bg-gold-500 text-emerald-900 text-xl font-bold shadow-glow hover:bg-gold-400 transition-all hover:scale-105 active:scale-95"
-                    onClick={() => setFlow("LANGUAGE_PICK")}
+                    onClick={startIntro}
                     style={{ minHeight: "60px" }}
                   >
-                    Tap to Begin
+                    {t.tapToStart}
                   </button>
                 </div>
               </ClickSpark>
-            </AnimatedContent>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // LANGUAGE_PICK Screen
-  if (flow === "LANGUAGE_PICK") {
-    return (
-      <div className="h-full w-full relative flex items-center justify-center overflow-hidden"
-        style={{ background: "linear-gradient(135deg, #0b4a3a 0%, #156f58 50%, #0f5a46 100%)" }}>
-        {logoElement}
-
-        {/* Islamic geometry overlay */}
-        <div className="islamic-geo" />
-
-        {/* MetaBalls ambient layer */}
-        <div className="absolute inset-0 opacity-30 pointer-events-none" style={{ pointerEvents: "none" }}>
-          <MetaBalls
-            color="#156f58"
-            cursorBallColor="#d4a92a"
-            speed={0.15}
-            ballCount={12}
-            clumpFactor={0.8}
-            cursorBallSize={2}
-            animationSize={25}
-            enableTransparency={true}
-            enableMouseInteraction={false}
-          />
-        </div>
-
-        {/* Premium ambient light - top glow */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: `radial-gradient(circle at 50% 20%, rgba(212, 169, 42, 0.15) 0%, transparent 50%)`,
-          }}
-        />
-
-        {/* Premium ambient light - center glow */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: `radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 0%, transparent 60%)`,
-          }}
-        />
-
-        {/* Subtle shimmer overlay for depth */}
-        <div
-          className="absolute inset-0 opacity-20 pointer-events-none"
-          style={{
-            background: `
-              linear-gradient(125deg, transparent 40%, rgba(212, 169, 42, 0.1) 50%, transparent 60%),
-              radial-gradient(circle at 30% 40%, rgba(212, 169, 42, 0.06) 0%, transparent 50%),
-              radial-gradient(circle at 70% 60%, rgba(47, 169, 135, 0.06) 0%, transparent 50%)
-            `,
-          }}
-        />
-
-        {/* Vignette - darker edges for cinematic depth */}
-        <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            background: `radial-gradient(ellipse at center, transparent 30%, rgba(0, 0, 0, 0.4) 100%)`,
-          }}
-        />
-
-        <div className="relative z-10 w-full h-full flex items-center justify-center">
-          <div className="w-full max-w-3xl flex flex-col items-center gap-8 text-center px-8">
-            <AnimatedContent delay={0} duration={1} distance={30} threshold={0}>
-              <div className="text-3xl md:text-4xl font-semibold text-white mb-4">
-                {t.chooseLanguage || "Choose Your Language"}
-              </div>
-            </AnimatedContent>
-
-            <AnimatedContent delay={0.3} duration={1} distance={20} threshold={0}>
-              <StarBorder color="#d4a92a" starCount={30} speed={4}>
-                <div className="rounded-3xl px-8 py-8 bg-white/10 backdrop-blur-md border-2 border-gold-400/30">
-                  <div className="flex items-center justify-center gap-6 flex-wrap">
-                    <ClickSpark color="#d4a92a">
-                      <button
-                        className="px-10 py-5 rounded-2xl border-2 border-gold-400 bg-white/20 text-white text-2xl font-bold hover:bg-white/30 transition-colors"
-                        onClick={() => ensureLangLock("EN")}
-                        style={{ minWidth: "140px", minHeight: "70px" }}
-                      >
-                        English
-                      </button>
-                    </ClickSpark>
-
-                    <ClickSpark color="#d4a92a">
-                      <button
-                        className="px-10 py-5 rounded-2xl border-2 border-gold-400 bg-white/20 text-white text-2xl font-bold hover:bg-white/30 transition-colors"
-                        onClick={() => ensureLangLock("AR")}
-                        style={{ minWidth: "140px", minHeight: "70px" }}
-                      >
-                        العربية
-                      </button>
-                    </ClickSpark>
-
-                    <ClickSpark color="#d4a92a">
-                      <button
-                        className="px-10 py-5 rounded-2xl border-2 border-gold-400 bg-white/20 text-white text-2xl font-bold hover:bg-white/30 transition-colors"
-                        onClick={() => ensureLangLock("FR")}
-                        style={{ minWidth: "140px", minHeight: "70px" }}
-                      >
-                        Français
-                      </button>
-                    </ClickSpark>
-                  </div>
-                </div>
-              </StarBorder>
             </AnimatedContent>
           </div>
         </div>
@@ -593,7 +658,7 @@ export function KioskFlow() {
         <div className="w-full flex justify-center py-2" style={{ pointerEvents: "none" }}>
           <div className={`w-full ${flow === "CHAT" || flow === "FEEDBACK" ? "max-w-md h-[180px]" : "max-w-sm h-[200px]"} transition-all duration-500`}>
             <div className={`mx-auto h-full ${flow === "CHAT" || flow === "FEEDBACK" ? "max-w-xs p-3" : "w-full"}`}>
-              <TayyibPanel state={stateForTayyib} variant="compact" />
+              <TayyibPanel state={stateForTayyib} variant="compact" objectPosition="50% 8%" />
             </div>
           </div>
         </div>
@@ -689,7 +754,7 @@ export function KioskFlow() {
                 className="min-h-[44px] px-5 py-2 rounded-2xl border border-red-300/60 bg-red-50/80 text-red-700 text-sm font-medium active:scale-[0.98] transition-transform"
                 onClick={handleReset}
               >
-                End Session
+                {t.endSession}
               </button>
             </div>
           </div>
@@ -714,7 +779,13 @@ export function KioskFlow() {
 
           {/* Chat input bar */}
           <div className="px-4 py-3 border-t border-white/10">
-            <div className="max-w-2xl mx-auto flex gap-2 items-center">
+            <div className="max-w-2xl mx-auto space-y-2">
+              {sessionLimitReached && (
+                <div className="rounded-2xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+                  {sessionLimitMessage}
+                </div>
+              )}
+              <div className="flex gap-2 items-center">
               <div className="relative flex-1">
                 <input
                   type="text"
@@ -724,14 +795,14 @@ export function KioskFlow() {
                   placeholder={t.chatPlaceholder}
                   className="w-full rounded-2xl border border-gold-200/60 bg-white/90 backdrop-blur-sm pl-4 pr-4 py-3 text-sm text-emerald-950 focus:outline-none focus:ring-2 focus:ring-emerald-400"
                   style={{ minHeight: "48px" }}
-                  disabled={isStreaming}
+                  disabled={isStreaming || sessionLimitReached}
                 />
               </div>
               <ClickSpark color="#d4a92a" sparkCount={6}>
                 <button
                   className="min-h-[48px] px-5 rounded-2xl bg-emerald-800 text-white text-sm font-medium shadow-soft active:scale-[0.98] transition-transform disabled:opacity-50"
                   onClick={() => submitChat()}
-                  disabled={isStreaming || !query.trim()}
+                  disabled={isStreaming || sessionLimitReached || !query.trim()}
                 >
                   {t.sendButton}
                 </button>
@@ -741,9 +812,10 @@ export function KioskFlow() {
                   className="min-h-[48px] px-4 rounded-2xl border border-red-300/60 bg-red-50/80 text-red-700 text-sm font-medium active:scale-[0.98] transition-transform"
                   onClick={handleReset}
                 >
-                  End
+                  {t.endButton}
                 </button>
               </ClickSpark>
+              </div>
             </div>
           </div>
         </div>
@@ -763,12 +835,12 @@ export function KioskFlow() {
                 onClick={() => setSourcesDrawerOpen(false)}
                 style={{ minHeight: "44px" }}
               >
-                Close
+                {t.closeButton}
               </button>
             </div>
             <div className="flex-1 overflow-y-auto p-6 space-y-3 sources-scroll">
               {activeSources.map((s, idx) => {
-                const pageLabel = s.page_start && s.page_end ? `pp. ${s.page_start}-${s.page_end}` : s.page ? `p. ${s.page}` : "";
+                const pageLabel = s.page_start && s.page_end ? `${t.pagesAbbr} ${s.page_start}-${s.page_end}` : s.page ? `${t.pageAbbr} ${s.page}` : "";
                 const url = s.url_or_path || s.url || "";
                 const isLink = typeof url === "string" && url.startsWith("http");
                 return (
@@ -795,7 +867,7 @@ export function KioskFlow() {
         </div>
       )}
 
-      {/* Floor plan drawer */}
+            {/* Floor plan drawer */}
       {floorPlanOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-end justify-center md:items-center md:justify-end" onClick={() => setFloorPlanOpen(false)}>
           <div
@@ -809,30 +881,90 @@ export function KioskFlow() {
                 onClick={() => setFloorPlanOpen(false)}
                 style={{ minHeight: "44px" }}
               >
-                Close
+                {t.closeButton}
               </button>
             </div>
-            <div className="flex-1 bg-white relative overflow-hidden">
-              {/* Mask browser PDF UI to show map area only. */}
-              <iframe
-                title={t.floorPlanTitle}
-                src={`${floorPlanPdfUrl}#page=1&zoom=page-fit&pagemode=none&toolbar=0&navpanes=0&scrollbar=0`}
-                className="absolute border-0"
-                style={{
-                  width: "calc(100% + 260px)",
-                  height: "calc(100% + 78px)",
-                  left: "-210px",
-                  top: "-78px",
-                }}
-              />
-              <div className="absolute top-0 left-0 right-0 h-[78px] bg-white pointer-events-none" />
-              <div className="absolute top-0 left-0 bottom-0 w-[210px] bg-white pointer-events-none" />
+
+            <div className="px-4 py-2 border-b border-gold-200 bg-white/95 flex items-center justify-between gap-3">
+              <div className="text-xs text-gray-600">Drag map to pan. Use + and - to zoom.</div>
+              <div className="flex items-center gap-2">
+                <button
+                  className="h-9 w-9 rounded-lg border border-gold-200 bg-white text-emerald-900 text-lg leading-none disabled:opacity-40"
+                  onClick={() => updateMapZoom(-MAP_ZOOM_STEP)}
+                  disabled={mapZoom <= MAP_MIN_ZOOM}
+                  aria-label="Zoom out"
+                >
+                  -
+                </button>
+                <button
+                  className="h-9 w-9 rounded-lg border border-gold-200 bg-white text-emerald-900 text-lg leading-none disabled:opacity-40"
+                  onClick={() => updateMapZoom(MAP_ZOOM_STEP)}
+                  disabled={mapZoom >= MAP_MAX_ZOOM}
+                  aria-label="Zoom in"
+                >
+                  +
+                </button>
+                <button
+                  className="h-9 px-3 rounded-lg border border-gold-200 bg-white text-emerald-900 text-xs"
+                  onClick={resetMapView}
+                >
+                  Reset
+                </button>
+              </div>
             </div>
+
+            <div
+              ref={mapViewportRef}
+              className="flex-1 bg-white relative overflow-hidden touch-none"
+              style={{ touchAction: "none" }}
+              onPointerDown={handleMapPointerDown}
+              onPointerMove={handleMapPointerMove}
+              onPointerUp={finishMapPointerDrag}
+              onPointerCancel={finishMapPointerDrag}
+              onLostPointerCapture={finishMapPointerDrag}
+            >
+              {!floorPlanImageFailed ? (
+                <div
+                  className="absolute left-1/2 top-1/2 select-none"
+                  style={{
+                    transform: `translate(-50%, -50%) translate(${mapPan.x}px, ${mapPan.y}px) scale(${mapBaseScale * mapZoom})`,
+                    transformOrigin: "center center",
+                    cursor: isMapDragging ? "grabbing" : "grab",
+                  }}
+                >
+                  <img
+                    src={floorPlanImageUrl}
+                    alt={t.floorPlanTitle}
+                    draggable={false}
+                    onLoad={(e) => {
+                      setFloorPlanImageFailed(false);
+                      setMapNatural({ w: e.currentTarget.naturalWidth || 1, h: e.currentTarget.naturalHeight || 1 });
+                    }}
+                    onError={() => {
+                      if (floorPlanImageIdx < FLOOR_PLAN_IMAGE_CANDIDATES.length - 1) {
+                        setFloorPlanImageIdx((idx) => Math.min(idx + 1, FLOOR_PLAN_IMAGE_CANDIDATES.length - 1));
+                        return;
+                      }
+                      setFloorPlanImageFailed(true);
+                    }}
+                    style={{
+                      maxWidth: "none",
+                      maxHeight: "none",
+                      pointerEvents: "none",
+                      userSelect: "none",
+                    }}
+                  />
+                </div>
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center text-sm text-gray-600 px-6 text-center">
+                  {t.floorPlanUnavailable}
+                </div>
+              )}
+            </div>
+
             <div className="px-4 py-2 text-xs text-gray-600 border-t border-gold-200 flex items-center justify-between">
-              <span>{t.floorPlanUnavailable}</span>
-              <a className="text-emerald-800 underline" href={floorPlanPdfUrl} target="_blank" rel="noreferrer">
-                {t.openPdf}
-              </a>
+              <span>Zoom: {Math.round(mapZoom * 100)}%</span>
+              <span>{floorPlanImageFailed ? t.floorPlanUnavailable : "Drag to move the map"}</span>
             </div>
           </div>
         </div>
