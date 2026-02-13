@@ -22,7 +22,6 @@ from app.services.hash_service import hash_query
 from app.services.offline_pack_service import (
   CHIP_CONF_THRESHOLD,
   get_confident_suggestions,
-  get_suggestions,
   match_offline,
 )
 from app.services.rag_service import retrieve
@@ -154,18 +153,16 @@ def insufficient_grounding_message(lang: str) -> str:
 
 
 def suggestion_chips(query: str, lang: str, retrieved_sources: List[Dict[str, Any]] | None = None) -> List[str]:
-  if retrieved_sources:
-    chips = get_confident_suggestions(
-      query,
-      lang,
-      retrieved_sources,
-      limit=3,
-      min_confidence=CHIP_CONFIDENCE_THRESHOLD,
-    )
-    if chips:
-      return chips
-  chips = get_suggestions(query, lang, limit=3)
-  return chips if chips else clarifier_options(query, lang)
+  if not retrieved_sources:
+    return []
+  chips = get_confident_suggestions(
+    query,
+    lang,
+    retrieved_sources,
+    limit=3,
+    min_confidence=CHIP_CONFIDENCE_THRESHOLD,
+  )
+  return chips
 
 
 def build_prompt(query: str, lang: str, sources: List[Dict[str, Any]]) -> List[Dict[str, Any]]:

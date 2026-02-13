@@ -1,7 +1,7 @@
 ﻿sources:
   - id: mhf_forum_program_en
     title: "Makkah Halal Forum Program (EN)"
-    url_or_path: "data/rag_corpus/pdfs/MHF_EN.pdf"
+    url_or_path: "data/rag_corpus/pdfs/MHF_Program_EN.pdf"
     lang: "EN"
     type: "pdf"
     approved_by: "ICHS event team"
@@ -9,15 +9,15 @@
 
   - id: mhf_forum_program_ar
     title: "برنامج منتدى مكة للحلال (AR)"
-    url_or_path: "data/rag_corpus/texts/MHF_AR.txt"
+    url_or_path: "data/rag_corpus/pdfs/MHF_Program_AR.pdf"
     lang: "AR"
-    type: "txt"
+    type: "pdf"
     approved_by: "ICHS event team"
     approved_date: "2026-02-12"
 
   - id: mhf_forum_program_fr
     title: "Programme du Makkah Halal Forum (FR)"
-    url_or_path: "data/rag_corpus/texts/MHF_FR.txt"
+    url_or_path: "data/rag_corpus/texts/MHF_Program_FR.txt"
     lang: "FR"
     type: "txt"
     approved_by: "ICHS event team"
