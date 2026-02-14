@@ -68,9 +68,9 @@ def _offline_intent_conflict(query: str, source_ids: List[str]) -> bool:
 
 def _verified_only_message(lang: str) -> str:
   if lang == "AR":
-    return "Ù„Ù… Ø£Ø¬Ø¯ Ø¥Ø¬Ø§Ø¨Ø© Ù…ÙˆØ«Ù‚Ø© ÙÙŠ Ù…Ø³ØªÙ†Ø¯Ø§Øª Ø§Ù„ÙØ¹Ø§Ù„ÙŠØ© Ø§Ù„Ø±Ø³Ù…ÙŠØ©. Ø§Ø®ØªØ± Ø³Ø¤Ø§Ù„Ø§ Ø£Ø¯Ù‚ Ø£Ùˆ Ø±Ø§Ø¬Ø¹ Ù…ÙƒØªØ¨ Ø§Ù„Ù…Ø¹Ù„ÙˆÙ…Ø§Øª."
+    return "\u0644\u0645 \u0623\u062c\u062f \u0625\u062c\u0627\u0628\u0629 \u0645\u0648\u062b\u0642\u0629 \u0641\u064a \u0645\u0633\u062a\u0646\u062f\u0627\u062a \u0627\u0644\u0641\u0639\u0627\u0644\u064a\u0629 \u0627\u0644\u0631\u0633\u0645\u064a\u0629. \u0627\u062e\u062a\u0631 \u0633\u0624\u0627\u0644\u0627 \u0623\u062f\u0642 \u0623\u0648 \u0631\u0627\u062c\u0639 \u0645\u0643\u062a\u0628 \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a."
   if lang == "FR":
-    return "Je n'ai pas trouvÃ© de rÃ©ponse vÃ©rifiÃ©e dans les documents officiels de l'Ã©vÃ©nement. Reformulez votre question ou consultez le bureau d'information."
+    return "Je n'ai pas trouv\u00e9 de r\u00e9ponse v\u00e9rifi\u00e9e dans les documents officiels de l'\u00e9v\u00e9nement. Reformulez votre question ou consultez le bureau d'information."
   return "I couldn't verify this in the official event documents. Please ask a more specific question or check with the information desk."
 
 
@@ -85,33 +85,33 @@ def _max_messages_per_session() -> int:
 
 def _session_limit_message(limit: int, lang: str) -> str:
   if lang == "AR":
-    return f"ÙˆØµÙ„Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¬Ù„Ø³Ø© Ø¥Ù„Ù‰ Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£Ù‚ØµÙ‰ ({limit} Ø±Ø³Ø§Ù„Ø©). Ø§Ø¶ØºØ· Ø¹Ù„Ù‰ Ø¥Ù†Ù‡Ø§Ø¡ Ø§Ù„Ø¬Ù„Ø³Ø© Ù„Ø¨Ø¯Ø¡ Ø¬Ù„Ø³Ø© Ø¬Ø¯ÙŠØ¯Ø©."
+    return f"\u0648\u0635\u0644\u062a \u0647\u0630\u0647 \u0627\u0644\u062c\u0644\u0633\u0629 \u0625\u0644\u0649 \u0627\u0644\u062d\u062f \u0627\u0644\u0623\u0642\u0635\u0649 ({limit} \u0631\u0633\u0627\u0644\u0629). \u0627\u0636\u063a\u0637 \u0639\u0644\u0649 \u0625\u0646\u0647\u0627\u0621 \u0627\u0644\u062c\u0644\u0633\u0629 \u0644\u0628\u062f\u0621 \u062c\u0644\u0633\u0629 \u062c\u062f\u064a\u062f\u0629."
   if lang == "FR":
-    return f"Cette session a atteint la limite ({limit} messages). Appuyez sur Fin de session pour en dÃ©marrer une nouvelle."
+    return f"Cette session a atteint la limite ({limit} messages). Appuyez sur Fin de session pour en d\u00e9marrer une nouvelle."
   return f"This session reached the limit ({limit} messages). Tap End Session to start a new session."
 
 
 def _empty_query_message(lang: str) -> str:
   if lang == "AR":
-    return "Ø§Ø³Ø£Ù„Ù†ÙŠ Ø³Ø¤Ø§Ù„Ø§Ù‹ Ø¹Ù† Ø§Ù„ÙØ¹Ø§Ù„ÙŠØ©!"
+    return "\u0627\u0633\u0623\u0644\u0646\u064a \u0633\u0624\u0627\u0644\u0627 \u0639\u0646 \u0627\u0644\u0641\u0639\u0627\u0644\u064a\u0629!"
   if lang == "FR":
-    return "Posez-moi une question sur l'Ã©vÃ©nement !"
+    return "Posez-moi une question sur l'\u00e9v\u00e9nement !"
   return "Please ask me a question about the event!"
 
 
 def _vague_query_message(lang: str) -> str:
   if lang == "AR":
-    return "Ø£ÙˆØ¯ Ù…Ø³Ø§Ø¹Ø¯ØªÙƒ. Ù‡Ù„ ÙŠÙ…ÙƒÙ†Ùƒ ØªØ­Ø¯ÙŠØ¯ Ø³Ø¤Ø§Ù„Ùƒ Ø¨Ø´ÙƒÙ„ Ø£Ø¯Ù‚ØŸ"
+    return "\u0623\u0648\u062f \u0645\u0633\u0627\u0639\u062f\u062a\u0643. \u0647\u0644 \u064a\u0645\u0643\u0646\u0643 \u062a\u062d\u062f\u064a\u062f \u0633\u0624\u0627\u0644\u0643 \u0628\u0634\u0643\u0644 \u0623\u062f\u0642\u061f"
   if lang == "FR":
-    return "Je souhaite vous aider. Pourriez-vous prÃ©ciser votre question ?"
+    return "Je souhaite vous aider. Pourriez-vous pr\u00e9ciser votre question ?"
   return "I'd like to help with that. Could you be a bit more specific?"
 
 
 def _error_message(lang: str) -> str:
   if lang == "AR":
-    return "Ø¹Ø°Ø±Ø§Ù‹ØŒ Ù„Ù… Ø£ØªÙ…ÙƒÙ† Ù…Ù† Ø¥ØªÙ…Ø§Ù… Ù‡Ø°Ø§ Ø§Ù„Ø·Ù„Ø¨. ÙŠØ±Ø¬Ù‰ Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø© Ù…Ø±Ø© Ø£Ø®Ø±Ù‰."
+    return "\u0639\u0630\u0631\u0627\u060c \u0644\u0645 \u0623\u062a\u0645\u0643\u0646 \u0645\u0646 \u0625\u062a\u0645\u0627\u0645 \u0647\u0630\u0627 \u0627\u0644\u0637\u0644\u0628. \u064a\u0631\u062c\u0649 \u0627\u0644\u0645\u062d\u0627\u0648\u0644\u0629 \u0645\u0631\u0629 \u0623\u062e\u0631\u0649."
   if lang == "FR":
-    return "DÃ©solÃ©, je n'ai pas pu traiter cette demande. Veuillez rÃ©essayer."
+    return "D\u00e9sol\u00e9, je n'ai pas pu traiter cette demande. Veuillez r\u00e9essayer."
   return "I'm sorry, I couldn't complete that request. Please try again."
 
 
@@ -209,9 +209,9 @@ def _offline_to_prose(match: Dict[str, Any], lang: str) -> str:
 
   if steps:
     if lang == "AR":
-      parts.append("## تفاصيل")
+      parts.append("## \u062a\u0641\u0627\u0635\u064a\u0644")
     elif lang == "FR":
-      parts.append("## Détails")
+      parts.append("## D\u00e9tails")
     else:
       parts.append("## Details")
     parts.append("\n".join(f"- {s}" for s in steps[:4]))
