@@ -16,7 +16,13 @@ from app.services.ask_service import (
 )
 from app.services.hash_service import hash_query
 from app.services.offline_pack_service import match_offline
-from app.services.rag_service import retrieve
+from app.services.rag_service import (
+  confidence_from_sources,
+  filter_sources_for_query,
+  is_landmarks_query,
+  is_landmarks_source_id,
+  retrieve,
+)
 
 OFFLINE_THRESHOLD = 0.25
 RAG_THRESHOLD = 0.35
@@ -53,11 +59,18 @@ def _effective_query(messages, latest_query: str) -> str:
   return latest_query
 
 
+def _offline_intent_conflict(query: str, source_ids: List[str]) -> bool:
+  if not source_ids:
+    return False
+  landmarks_match = any(is_landmarks_source_id(str(sid)) for sid in source_ids)
+  return landmarks_match != is_landmarks_query(query)
+
+
 def _verified_only_message(lang: str) -> str:
   if lang == "AR":
-    return "لم أجد إجابة موثقة في مستندات الفعالية الرسمية. اختر سؤالا أدق أو راجع مكتب المعلومات."
+    return "Ù„Ù… Ø£Ø¬Ø¯ Ø¥Ø¬Ø§Ø¨Ø© Ù…ÙˆØ«Ù‚Ø© ÙÙŠ Ù…Ø³ØªÙ†Ø¯Ø§Øª Ø§Ù„ÙØ¹Ø§Ù„ÙŠØ© Ø§Ù„Ø±Ø³Ù…ÙŠØ©. Ø§Ø®ØªØ± Ø³Ø¤Ø§Ù„Ø§ Ø£Ø¯Ù‚ Ø£Ùˆ Ø±Ø§Ø¬Ø¹ Ù…ÙƒØªØ¨ Ø§Ù„Ù…Ø¹Ù„ÙˆÙ…Ø§Øª."
   if lang == "FR":
-    return "Je n'ai pas trouvé de réponse vérifiée dans les documents officiels de l'événement. Reformulez votre question ou consultez le bureau d'information."
+    return "Je n'ai pas trouvÃ© de rÃ©ponse vÃ©rifiÃ©e dans les documents officiels de l'Ã©vÃ©nement. Reformulez votre question ou consultez le bureau d'information."
   return "I couldn't verify this in the official event documents. Please ask a more specific question or check with the information desk."
 
 
@@ -72,38 +85,39 @@ def _max_messages_per_session() -> int:
 
 def _session_limit_message(limit: int, lang: str) -> str:
   if lang == "AR":
-    return f"وصلت هذه الجلسة إلى الحد الأقصى ({limit} رسالة). اضغط على إنهاء الجلسة لبدء جلسة جديدة."
+    return f"ÙˆØµÙ„Øª Ù‡Ø°Ù‡ Ø§Ù„Ø¬Ù„Ø³Ø© Ø¥Ù„Ù‰ Ø§Ù„Ø­Ø¯ Ø§Ù„Ø£Ù‚ØµÙ‰ ({limit} Ø±Ø³Ø§Ù„Ø©). Ø§Ø¶ØºØ· Ø¹Ù„Ù‰ Ø¥Ù†Ù‡Ø§Ø¡ Ø§Ù„Ø¬Ù„Ø³Ø© Ù„Ø¨Ø¯Ø¡ Ø¬Ù„Ø³Ø© Ø¬Ø¯ÙŠØ¯Ø©."
   if lang == "FR":
-    return f"Cette session a atteint la limite ({limit} messages). Appuyez sur Fin de session pour en démarrer une nouvelle."
+    return f"Cette session a atteint la limite ({limit} messages). Appuyez sur Fin de session pour en dÃ©marrer une nouvelle."
   return f"This session reached the limit ({limit} messages). Tap End Session to start a new session."
 
 
 def _empty_query_message(lang: str) -> str:
   if lang == "AR":
-    return "اسألني سؤالاً عن الفعالية!"
+    return "Ø§Ø³Ø£Ù„Ù†ÙŠ Ø³Ø¤Ø§Ù„Ø§Ù‹ Ø¹Ù† Ø§Ù„ÙØ¹Ø§Ù„ÙŠØ©!"
   if lang == "FR":
-    return "Posez-moi une question sur l'événement !"
+    return "Posez-moi une question sur l'Ã©vÃ©nement !"
   return "Please ask me a question about the event!"
 
 
 def _vague_query_message(lang: str) -> str:
   if lang == "AR":
-    return "أود مساعدتك. هل يمكنك تحديد سؤالك بشكل أدق؟"
+    return "Ø£ÙˆØ¯ Ù…Ø³Ø§Ø¹Ø¯ØªÙƒ. Ù‡Ù„ ÙŠÙ…ÙƒÙ†Ùƒ ØªØ­Ø¯ÙŠØ¯ Ø³Ø¤Ø§Ù„Ùƒ Ø¨Ø´ÙƒÙ„ Ø£Ø¯Ù‚ØŸ"
   if lang == "FR":
-    return "Je souhaite vous aider. Pourriez-vous préciser votre question ?"
+    return "Je souhaite vous aider. Pourriez-vous prÃ©ciser votre question ?"
   return "I'd like to help with that. Could you be a bit more specific?"
 
 
 def _error_message(lang: str) -> str:
   if lang == "AR":
-    return "عذراً، لم أتمكن من إتمام هذا الطلب. يرجى المحاولة مرة أخرى."
+    return "Ø¹Ø°Ø±Ø§Ù‹ØŒ Ù„Ù… Ø£ØªÙ…ÙƒÙ† Ù…Ù† Ø¥ØªÙ…Ø§Ù… Ù‡Ø°Ø§ Ø§Ù„Ø·Ù„Ø¨. ÙŠØ±Ø¬Ù‰ Ø§Ù„Ù…Ø­Ø§ÙˆÙ„Ø© Ù…Ø±Ø© Ø£Ø®Ø±Ù‰."
   if lang == "FR":
-    return "Désolé, je n'ai pas pu traiter cette demande. Veuillez réessayer."
+    return "DÃ©solÃ©, je n'ai pas pu traiter cette demande. Veuillez rÃ©essayer."
   return "I'm sorry, I couldn't complete that request. Please try again."
 
 
 def _sse_token(text: str) -> str:
-  return f"event: token\ndata: {text}\n\n"
+  # JSON-encode token payload so newlines/special chars are transmitted losslessly.
+  return f"event: token\ndata: {json.dumps(text, ensure_ascii=False)}\n\n"
 
 
 def _sse_meta(meta: ChatResponseMeta) -> str:
@@ -142,16 +156,16 @@ def _build_system_prompt(lang: str, sources: List[Dict[str, Any]] | None = None)
     f"- Be conversational but concise. This is a kiosk and people are standing.\n"
     f"- Stay factual. Do not give medical or legal advice.\n"
     f"- Use only the provided sources for factual claims.\n"
+    f"- For schedule/session/masterclass/exhibition questions, synthesize across all relevant sources before concluding.\n"
+    f"- Do not claim an item is only on one day unless the sources explicitly state exclusivity.\n"
     f"- Do not include inline source tags like [Source 1] in answer text.\n"
     f"- If you don't know, say so clearly.\n"
     f"- Keep responses under 200 words unless the user asks for detail.\n\n"
     f"FORMATTING:\n"
-    f"- Use markdown.\n"
-    f"- Put headings, bullets, and paragraphs on separate lines.\n"
-    f"- Use sections only when relevant:\n"
-    f"  ## Direct Answer\n"
-    f"  ## Steps\n"
-    f"  ## Common Mistakes\n"
+    f"- Use markdown with short paragraphs.\n"
+    f"- Start with the direct answer immediately.\n"
+    f"- If helpful, add a short '## Details' section with up to 4 bullets.\n"
+    f"- Do not output sections like '## Steps' or '## Common Mistakes' unless explicitly requested by the user.\n"
   )
   if sources:
     snippets = "\n\n".join(
@@ -183,37 +197,26 @@ def _build_openai_input(system_prompt: str, history: List[Dict[str, str]]) -> Li
 def _offline_to_prose(match: Dict[str, Any], lang: str) -> str:
   answer = match.get("answer", {})
   parts: List[str] = []
+  direct = str(answer.get("direct", "")).strip()
+  steps = [str(s).strip() for s in answer.get("steps", []) if str(s).strip()]
 
-  if answer.get("direct"):
-    if lang == "AR":
-      parts.append("## الإجابة المباشرة")
-    elif lang == "FR":
-      parts.append("## Réponse directe")
-    else:
-      parts.append("## Direct Answer")
-    parts.append(answer["direct"])
+  if not direct and steps:
+    direct = steps[0]
+    steps = steps[1:]
 
-  steps = answer.get("steps", [])
+  if direct:
+    parts.append(direct)
+
   if steps:
     if lang == "AR":
-      parts.append("## الخطوات")
+      parts.append("## تفاصيل")
     elif lang == "FR":
-      parts.append("## Étapes")
+      parts.append("## Détails")
     else:
-      parts.append("## Steps")
-    parts.append("\n".join(f"- {s}" for s in steps))
+      parts.append("## Details")
+    parts.append("\n".join(f"- {s}" for s in steps[:4]))
 
-  mistakes = answer.get("mistakes", [])
-  if mistakes:
-    if lang == "AR":
-      parts.append("## أخطاء شائعة")
-    elif lang == "FR":
-      parts.append("## Erreurs courantes à éviter")
-    else:
-      parts.append("## Common Mistakes")
-    parts.append("\n".join(f"- {m}" for m in mistakes))
-
-  return "\n\n".join(parts)
+  return "\n\n".join(parts).strip()
 
 
 def _yield_text_as_tokens(text: str, chunk_size: int = 8) -> Generator[str, None, None]:
@@ -361,8 +364,11 @@ def stream_chat_response(payload: ChatRequest) -> Generator[str, None, None]:
 
     match, offline_conf = match_offline(rag_query, payload.lang)
     if match and offline_conf >= OFFLINE_THRESHOLD:
+      source_ids = [str(sid) for sid in match.get("source_ids", []) if sid]
+      if _offline_intent_conflict(rag_query, source_ids):
+        source_ids = []
       sources_raw, _ = retrieve(rag_query, payload.lang, top_k=5)
-      source_ids = match.get("source_ids", [])
+      sources_raw = filter_sources_for_query(rag_query, sources_raw)
       filtered = [s for s in sources_raw if s.get("source_id") in source_ids and s.get("score", 0) >= MIN_SOURCE_SCORE]
       if len(filtered) >= MIN_SOURCES:
         prose = _offline_to_prose(match, payload.lang)
@@ -378,7 +384,9 @@ def stream_chat_response(payload: ChatRequest) -> Generator[str, None, None]:
         _log_analytics(payload, "offline", offline_conf, len(filtered), None, latency_ms, latest_query)
         return
 
-    retrieved_sources, rag_conf = retrieve(rag_query, payload.lang, top_k=8)
+    retrieved_sources, _ = retrieve(rag_query, payload.lang, top_k=12)
+    retrieved_sources = filter_sources_for_query(rag_query, retrieved_sources)
+    rag_conf = confidence_from_sources(retrieved_sources)
     strong_sources = [s for s in retrieved_sources if s.get("score", 0) >= MIN_SOURCE_SCORE]
     confidence = rag_conf
 

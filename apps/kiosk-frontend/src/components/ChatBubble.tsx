@@ -22,6 +22,7 @@ function labelsFor(lang: "EN" | "AR" | "FR") {
   if (lang === "AR") {
     return {
       direct: "\u0627\u0644\u0627\u062c\u0627\u0628\u0629 \u0627\u0644\u0645\u0628\u0627\u0634\u0631\u0629",
+      details: "\u062a\u0641\u0627\u0635\u064a\u0644",
       steps: "\u0627\u0644\u062e\u0637\u0648\u0627\u062a",
       mistakes: "\u0627\u062e\u0637\u0627\u0621 \u0634\u0627\u0626\u0639\u0629",
     };
@@ -29,12 +30,14 @@ function labelsFor(lang: "EN" | "AR" | "FR") {
   if (lang === "FR") {
     return {
       direct: "Reponse directe",
+      details: "Details",
       steps: "Etapes",
       mistakes: "Erreurs courantes",
     };
   }
   return {
     direct: "Direct Answer",
+    details: "Details",
     steps: "Steps",
     mistakes: "Common Mistakes",
   };
@@ -45,42 +48,51 @@ function normalizeStructuredText(content: string, lang: "EN" | "AR" | "FR"): str
   let normalized = content.trim();
 
   normalized = normalized.replace(
-    /\*\*(Direct Answer|Answer|Steps?|Common Mistakes|R[e\u00e9]ponse directe|[E\u00c9]tapes|Erreurs courantes|\u0627\u0644\u0627\u062c\u0627\u0628\u0629 \u0627\u0644\u0645\u0628\u0627\u0634\u0631\u0629|\u0627\u0644\u062e\u0637\u0648\u0627\u062a|\u0627\u062e\u0637\u0627\u0621 \u0634\u0627\u0626\u0639\u0629)\*\*/gi,
+    /\*\*(Direct Answer|Answer|Details?|Steps?|Common Mistakes|R[e\u00e9]ponse directe|D[e\u00e9]tails?|[E\u00c9]tapes|Erreurs courantes|\u0627\u0644\u0627\u062c\u0627\u0628\u0629 \u0627\u0644\u0645\u0628\u0627\u0634\u0631\u0629|\u062a\u0641\u0627\u0635\u064a\u0644|\u0627\u0644\u062e\u0637\u0648\u0627\u062a|\u0627\u062e\u0637\u0627\u0621 \u0634\u0627\u0626\u0639\u0629)\*\*/gi,
     "$1",
   );
 
   // If the model emits "Direct Answer <text>" on one line, split it into heading + body.
   normalized = normalized
     .replace(/(^|\n)\s*#{0,3}\s*(Direct Answer|Answer)\s*:?\s*([^\n]+)/gim, (_m, p1, _p2, p3) => `${p1}## ${labels.direct}\n${p3}`)
+    .replace(/(^|\n)\s*#{0,3}\s*(Details?)\s*:?\s*([^\n]+)/gim, (_m, p1, _p2, p3) => `${p1}## ${labels.details}\n${p3}`)
     .replace(/(^|\n)\s*#{0,3}\s*(Steps?|Step-by-step)\s*:?\s*([^\n]+)/gim, (_m, p1, _p2, p3) => `${p1}## ${labels.steps}\n${p3}`)
     .replace(/(^|\n)\s*#{0,3}\s*(Common Mistakes|Mistakes to avoid)\s*:?\s*([^\n]+)/gim, (_m, p1, _p2, p3) => `${p1}## ${labels.mistakes}\n${p3}`)
     .replace(/(^|\n)\s*#{0,3}\s*(R[e\u00e9]ponse directe)\s*:?\s*([^\n]+)/gim, (_m, p1, _p2, p3) => `${p1}## ${labels.direct}\n${p3}`)
+    .replace(/(^|\n)\s*#{0,3}\s*(D[e\u00e9]tails?)\s*:?\s*([^\n]+)/gim, (_m, p1, _p2, p3) => `${p1}## ${labels.details}\n${p3}`)
     .replace(/(^|\n)\s*#{0,3}\s*([E\u00c9]tapes)\s*:?\s*([^\n]+)/gim, (_m, p1, _p2, p3) => `${p1}## ${labels.steps}\n${p3}`)
     .replace(/(^|\n)\s*#{0,3}\s*(Erreurs courantes)\s*:?\s*([^\n]+)/gim, (_m, p1, _p2, p3) => `${p1}## ${labels.mistakes}\n${p3}`)
     .replace(/(^|\n)\s*#{0,3}\s*(\u0627\u0644\u0627\u062c\u0627\u0628\u0629 \u0627\u0644\u0645\u0628\u0627\u0634\u0631\u0629)\s*:?\s*([^\n]+)/gim, (_m, p1, _p2, p3) => `${p1}## ${labels.direct}\n${p3}`)
+    .replace(/(^|\n)\s*#{0,3}\s*(\u062a\u0641\u0627\u0635\u064a\u0644)\s*:?\s*([^\n]+)/gim, (_m, p1, _p2, p3) => `${p1}## ${labels.details}\n${p3}`)
     .replace(/(^|\n)\s*#{0,3}\s*(\u0627\u0644\u062e\u0637\u0648\u0627\u062a)\s*:?\s*([^\n]+)/gim, (_m, p1, _p2, p3) => `${p1}## ${labels.steps}\n${p3}`)
     .replace(/(^|\n)\s*#{0,3}\s*(\u0627\u062e\u0637\u0627\u0621 \u0634\u0627\u0626\u0639\u0629)\s*:?\s*([^\n]+)/gim, (_m, p1, _p2, p3) => `${p1}## ${labels.mistakes}\n${p3}`);
 
   normalized = normalized
     .replace(/(^|\n)\s*#{1,3}\s*(Direct Answer|Answer)\s*:?/gim, `\n## ${labels.direct}`)
+    .replace(/(^|\n)\s*#{1,3}\s*(Details?)\s*:?/gim, `\n## ${labels.details}`)
     .replace(/(^|\n)\s*#{1,3}\s*(Steps?|Step-by-step)\s*:?/gim, `\n## ${labels.steps}`)
     .replace(/(^|\n)\s*#{1,3}\s*(Common Mistakes|Mistakes to avoid)\s*:?/gim, `\n## ${labels.mistakes}`)
     .replace(/(^|\n)\s*#{1,3}\s*(R[e\u00e9]ponse directe)\s*:?/gim, `\n## ${labels.direct}`)
+    .replace(/(^|\n)\s*#{1,3}\s*(D[e\u00e9]tails?)\s*:?/gim, `\n## ${labels.details}`)
     .replace(/(^|\n)\s*#{1,3}\s*([E\u00c9]tapes)\s*:?/gim, `\n## ${labels.steps}`)
     .replace(/(^|\n)\s*#{1,3}\s*(Erreurs courantes)\s*:?/gim, `\n## ${labels.mistakes}`)
     .replace(/(^|\n)\s*#{1,3}\s*(\u0627\u0644\u0627\u062c\u0627\u0628\u0629 \u0627\u0644\u0645\u0628\u0627\u0634\u0631\u0629)\s*:?/gim, `\n## ${labels.direct}`)
+    .replace(/(^|\n)\s*#{1,3}\s*(\u062a\u0641\u0627\u0635\u064a\u0644)\s*:?/gim, `\n## ${labels.details}`)
     .replace(/(^|\n)\s*#{1,3}\s*(\u0627\u0644\u062e\u0637\u0648\u0627\u062a)\s*:?/gim, `\n## ${labels.steps}`)
     .replace(/(^|\n)\s*#{1,3}\s*(\u0627\u062e\u0637\u0627\u0621 \u0634\u0627\u0626\u0639\u0629)\s*:?/gim, `\n## ${labels.mistakes}`);
 
   normalized = normalized
     .replace(/(^|\n)\s*(Direct Answer)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.direct}\n`)
+    .replace(/(^|\n)\s*(Details?)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.details}\n`)
     .replace(/(^|\n)\s*(Answer)\s*:\s*/gim, `\n## ${labels.direct}\n`)
     .replace(/(^|\n)\s*(Steps?|Step-by-step)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.steps}\n`)
     .replace(/(^|\n)\s*(Common Mistakes|Mistakes to avoid)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.mistakes}\n`)
     .replace(/(^|\n)\s*(R[e\u00e9]ponse directe)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.direct}\n`)
+    .replace(/(^|\n)\s*(D[e\u00e9]tails?)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.details}\n`)
     .replace(/(^|\n)\s*([E\u00c9]tapes)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.steps}\n`)
     .replace(/(^|\n)\s*(Erreurs courantes)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.mistakes}\n`)
     .replace(/(^|\n)\s*(\u0627\u0644\u0627\u062c\u0627\u0628\u0629 \u0627\u0644\u0645\u0628\u0627\u0634\u0631\u0629)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.direct}\n`)
+    .replace(/(^|\n)\s*(\u062a\u0641\u0627\u0635\u064a\u0644)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.details}\n`)
     .replace(/(^|\n)\s*(\u0627\u0644\u062e\u0637\u0648\u0627\u062a)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.steps}\n`)
     .replace(/(^|\n)\s*(\u0627\u062e\u0637\u0627\u0621 \u0634\u0627\u0626\u0639\u0629)\s*:?\s*(?=\n|$)/gim, `\n## ${labels.mistakes}\n`);
 
@@ -93,9 +105,9 @@ function ensureMarkdownNewlines(raw: string): string {
   text = text.replace(/([^\n])(- )/g, "$1\n$2");
   text = text.replace(/([^\n])(\d+\.\s)/g, "$1\n$2");
   text = text
-    .replace(/(Direct Answer|Common Mistakes|Steps)\s*:?\s*(?=\S)/g, "$1\n\n")
-    .replace(/(Reponse directe|Etapes|Erreurs courantes)\s*:?\s*(?=\S)/g, "$1\n\n")
-    .replace(/(\u0627\u0644\u0627\u062c\u0627\u0628\u0629 \u0627\u0644\u0645\u0628\u0627\u0634\u0631\u0629|\u0627\u0644\u062e\u0637\u0648\u0627\u062a|\u0627\u062e\u0637\u0627\u0621 \u0634\u0627\u0626\u0639\u0629)\s*(?=\S)/g, "$1\n\n");
+    .replace(/(Direct Answer|Details|Common Mistakes|Steps)\s*:?\s*(?=\S)/g, "$1\n\n")
+    .replace(/(Reponse directe|Details|Etapes|Erreurs courantes)\s*:?\s*(?=\S)/g, "$1\n\n")
+    .replace(/(\u0627\u0644\u0627\u062c\u0627\u0628\u0629 \u0627\u0644\u0645\u0628\u0627\u0634\u0631\u0629|\u062a\u0641\u0627\u0635\u064a\u0644|\u0627\u0644\u062e\u0637\u0648\u0627\u062a|\u0627\u062e\u0637\u0627\u0621 \u0634\u0627\u0626\u0639\u0629)\s*(?=\S)/g, "$1\n\n");
   return text;
 }
 

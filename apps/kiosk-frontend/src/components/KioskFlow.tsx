@@ -700,20 +700,6 @@ return sid;
                   </div>
                 </div>
 
-                {/* Quick chips */}
-                <div className="flex flex-wrap gap-3">
-                  {t.quickChips.map((chip) => (
-                    <ClickSpark key={chip} color="#d4a92a" sparkCount={5}>
-                      <button
-                        className="min-h-[52px] px-6 rounded-full border border-emerald-300/70 bg-gradient-to-b from-white to-emerald-50 text-emerald-900 text-sm font-semibold shadow-[0_6px_16px_rgba(9,79,63,0.14)] transition-all hover:border-emerald-400/80 active:translate-y-[1px] active:scale-[0.99]"
-                        onClick={() => setQuery(chip)}
-                      >
-                        {chip}
-                      </button>
-                    </ClickSpark>
-                  ))}
-                </div>
-
                 {/* Trending */}
                 <div>
                   <div className="text-sm text-gray-600 mb-2">{t.trendingTitle}</div>

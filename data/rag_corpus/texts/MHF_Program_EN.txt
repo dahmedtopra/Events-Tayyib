@@ -1,0 +1,330 @@
+Makkah Halal Forum 2026 - Official Program (EN)
+Source: MHF_Program_EN.pdf
+
+
+## document_metadata
+
+* document_title: "MAKKAH HALAL FORUM – Third Edition" 
+* document_theme: "Halal as a Professional Industry" 
+* date_range: "February 14–16, 2026" 
+* patronage:
+
+  * label: "Under the Patronage of"
+  * name: "H.E. Dr. Majid bin Abdullah Al-Qasabi"
+  * title: "Minister of Commerce" 
+* venue: "Makkah Chamber Exhibition & Convention Center" 
+* tagline: "Where Leaders Shape The Halal Future" 
+* website: "[www.makkahhalalforum.com](http://www.makkahhalalforum.com)" 
+
+---
+
+# DAY OVERVIEWS (CLEANED)
+
+## day_1_overview
+
+* day_label: "Day 1"
+* date_label: "Saturday, 14 February 2026" 
+* activities:
+
+  * name: "Registration"
+    time: "1:30 pm – 2:00 pm"
+    location: "Main Exhibition Hall" 
+  * name: "High-Level Conference"
+    time: "2:00 pm – 8:00 pm"
+    location: "Theatre"
+    description: "A premium conference featuring keynote addresses, leadership talks, and expert panel discussions exploring the dynamics, opportunities, and future of the global halal economy." 
+  * name: "Exhibition"
+    time: "2:00 pm – 10:00 pm"
+    location: "Theatre"
+    description: "An interactive exhibition showcasing halal-certified organizations, leading brands, institutions, and international trade opportunities across the halal value chain." 
+  * name: "Halal Experts Corner (By Reservation)"
+    time: "2:00 pm – 10:00 pm"
+    location: "Main Exhibition Hall"
+    description: "A premium conference featuring keynote addresses, leadership talks, and expert panel discussions exploring the dynamics, opportunities, and future of the global halal economy." 
+  * name: "Halal Chefs"
+    time: "3:00 pm – 9:00 pm"
+    location: "Main Exhibition Hall"
+    description: "Live culinary demonstrations highlighting the creativity and global versatility of halal ingredients, reimagining international cuisines through halal-compliant innovation and modern culinary expression." 
+  * name: "Specialized Workshops (Masterclasses)"
+    time: "4:00 pm – 6:00 pm"
+    location: "Meeting Room"
+    description: "Practical, application-focused workshops designed for the private sector and chamber representatives, aimed at enhancing operational efficiency and transferable industry knowledge." 
+  * name: "High-Level Roundtable (Closed)"
+    time: "7:00 pm – 9:00 pm"
+    location: "Meeting Room"
+    description: "Exclusive closed-door roundtables bringing together global halal leaders to foster strategic collaboration, knowledge exchange and actionable insights shaping the future of the halal industry." 
+
+---
+
+## day_2_overview
+
+* day_label: "Day 2"
+* date_label: "Sunday, 15 February 2026" 
+* activities:
+
+  * name: "Registration"
+    time: "1:30 pm – 2:00 pm"
+    location: "Main Exhibition Hall" 
+  * name: "Exhibition"
+    time: "2:00 pm – 10:00 pm"
+    location: "Main Exhibition Hall"
+    description: "An interactive exhibition showcasing halal-certified organizations, leading brands, institutions, and international trade opportunities across the halal value chain." 
+  * name: "High-Level Conference"
+    time: "2:00 pm – 10:00 pm"
+    location: "Theatre"
+    description: "An interactive exhibition showcasing halal-certified organizations, leading brands, institutions, and international trade opportunities across the halal value chain." 
+  * name: "Halal Experts Corner (By Reservation)"
+    time: "3:00 pm – 7:00 pm"
+    location: "Main Exhibition Hall"
+    description: "A premium conference featuring keynote addresses, leadership talks, and expert panel discussions exploring the dynamics, opportunities, and future of the global halal economy." 
+  * name: "Halal Chefs"
+    time: "3:00 pm – 9:00 pm"
+    location: "Main Exhibition Hall"
+    description: "Live culinary demonstrations highlighting the creativity and global versatility of halal ingredients, reimagining international cuisines through halal-compliant innovation and modern culinary expression." 
+  * name: "Specialized Workshops (Masterclasses)"
+    time: "4:00 pm – 6:00 pm"
+    location: "Meeting Room" 
+  * name: "MoU Signing Platform"
+    time: "7:00 pm – 8:00 pm"
+    location: "Media Wall"
+    description: "Practical, application-focused workshops designed for the private sector and chamber representatives, aimed at enhancing operational efficiency and transferable industry knowledge." 
+  * name: "Official Opening Ceremony (Invitation Only)"
+    time: "8:00 pm – 10:00 pm"
+    location: "Theatre"
+    description: "Live culinary demonstrations highlighting the creativity and global versatility of halal ingredients, reimagining international cuisines through halal-compliant innovation and modern culinary expression." 
+
+---
+
+## day_3_overview
+
+* day_label: "Day 3"
+* date_label: "Monday, 16 February 2026" 
+* activities:
+
+  * name: "Registration"
+    time: "1:30 pm – 2:00 pm"
+    location: "Main Exhibition Hall" 
+  * name: "Exhibition"
+    time: "2:00 pm – 10:00 pm"
+    location: "Main Exhibition Hall"
+    description: "An interactive exhibition showcasing halal-certified organizations, leading brands, institutions, and international trade opportunities across the halal value chain." 
+  * name: "B2B Meetings Platform"
+    time: "2:00 pm – 10:00 pm"
+    location: "Networking Lounge"
+    description: "A curated business matchmaking platform facilitating targeted peer-to-peer meetings and strategic connections among global halal stakeholders." 
+  * name: "Women Empowerment in Halal Track"
+    time: "4:00 pm – 5:20 pm"
+    location: "Theatre"
+    description: "A dedicated track advancing women's leadership in the halal economy through impactful dialogue and empowerment." 
+  * name: "Halal Chefs"
+    time: "3:00 pm – 9:00 pm"
+    location: "Main Exhibition Hall"
+    description: "Live culinary demonstrations highlighting the creativity and global versatility of halal ingredients, reimagining international cuisines through halal-compliant innovation and modern culinary expression." 
+  * name: "Specialized Workshops (Masterclasses)"
+    time: "4:00 pm – 6:00 pm"
+    location: "Meeting Room" 
+  * name: "HalalPreneurship Track"
+    time: "5:30 pm – 6:45 pm"
+    location: "Meeting Room"
+    description: "Practical, application-focused workshops designed for the private sector and chamber representatives, aimed at enhancing operational efficiency and transferable industry knowledge." 
+  * name: "Halal Echo (Influencers Gathering)"
+    time: "7:00 pm – 9:00 pm"
+    location: "Meeting Room"
+    description: "Live culinary demonstrations highlighting the creativity and global versatility of halal ingredients, reimagining international cuisines through halal-compliant innovation and modern culinary expression." 
+  * note: "A strategic track highlighting high-impact business models, next-generation leaders, and globally scalable startups within the halal economy." 
+
+---
+
+# PROGRAM ITEMS (SESSION-LEVEL) — CLEANED
+
+## day_1_program
+
+* date: "2026-02-14"
+* items:
+
+  * type: "Opening Remarks"
+    time: "2:00 pm – 2:05 pm"
+    location: "Theatre" 
+  * type: "Panel Session"
+    time: "2:10 pm – 3:25 pm"
+    title: "Halal Branding for Global Positioning"
+    location: "Theatre" 
+  * type: "Leader Talk"
+    time: "3:30 pm – 3:50 pm"
+    title: "Halal as a Global Professional Identity"
+    location: "Theatre" 
+  * type: "Workshop"
+    time: "4:00 pm – 6:00 pm"
+    title: "Financing and Insurance Solutions from the Saudi Export-Import Bank"
+    location: "Meeting Room" 
+  * type: "Panel Session"
+    time: "4:15 pm – 5:35 pm"
+    title: "Halal Positioning – A National Economic Asset"
+    location: "Theatre" 
+  * type: "Keynote"
+    time: "5:40 pm – 6:00 pm"
+    title: "Investment in the Halal Sector from the Perspective of International Investors"
+    location: "Theatre" 
+  * type: "Panel Session"
+    time: "6:35 pm – 8:00 pm"
+    title: "Islamic Finance & Investment as the Core of Global Professionalism in the Halal Industry"
+    location: "Theatre" 
+
+### day_1_prayers
+
+* Asr Prayer: "03:50 pm – 04:15 pm" 
+* Maghrib Prayer: "06:00 pm – 06:35 pm" 
+
+### day_1_workshop_topics (Saudi Export-Import Bank)
+
+* "Introduction to the Saudi Export-Import Bank, its objectives, and its role."
+* "Products and services offered by the Saudi Export-Import Bank."
+* "Export financing guarantee programs."
+* "How to benefit from the bank’s products and the application process." 
+
+### day_1_people (corrected spellings only)
+
+* H.E. Mr. Yousef Hassan Khalawi — Secretary General, Islamic Chamber of Commerce and Development 
+* Mr. Fawaz Khayyat — Financial Institutions Management 
+* Mr. Abdulaziz Al-Sulami — Business Development Management 
+* Mr. Bader Al-Khawaji — Business Development Management 
+* Mr. Nafees Khundker — Group Chief Executive Officer & Managing Director at Bitsmedia Pte Ltd (Muslim Pro App) 
+* Mr. Ufuk Secgin — Co-Founder & Chief Marketing Officer at Halalbooking 
+* Mr. Khawaja Ahmed Osman — Chief Executive Officer, Pasha Fabrics 
+* Moderator: Ms. Farzana Baduel — President-Elect of the Chartered Institute of Public Relations (CIPR) & CEO of Curzon PR 
+* Moderator: Dr. Bandar Arab — Executive Director, Savola World Foundation 
+* Moderator: Mr. Conor Clifford Murphy — Partner at DinarStandard 
+* Mr. Abu Bakar Yusof — Chief Executive Officer at the Malaysia External Trade Development Corporation (MATRADE) 
+* Ms. Titi Khoiriah Muhali — Deputy Chairperson at the Indonesian Chamber of Commerce and Industry (KADIN) 
+* Mr. Muhammad Atif Hanif — Chief Executive Officer of Al Baraka Bank Pakistan 
+* Mr. Marut Mekloy — President, Thai Muslim Trade Association (TMTA) 
+* H.E. Mr. Mohammed Rasjid — Chairman of the Supervisory Board, Indonesian Chamber of Commerce and Industry (KADIN) 
+* Mr. Dino Selimović — Advisor to the Minister of Foreign Affairs of Bosnia and Herzegovina 
+* Moderator: Mr. Ibrahim El-Sayed — International Relations and Business Development Manager at Albaraka Forum for Islamic Economy 
+* His Eminence Shaikh Yasser Abdulaziz Al-Murshidi — Head of Sharia Compliance and Secretary General of the Sharia Committee at Al-Inmaa Bank 
+* Dr. Muawiya Al-Qawasmi — Director of Corporate and Project Management at the Arab Islamic Bank 
+* Mr. Khurram Hilal — Chief Executive Officer, Islamic Banking at Standard Chartered Bank 
+
+---
+
+## day_2_program
+
+* date: "2026-02-15"
+* items:
+
+  * type: "Panel Session"
+    time: "2:00 pm – 3:20 pm"
+    title: "C-Suite Readiness for Strategic Capacity Building"
+    location: "Theatre" 
+  * type: "Workshop"
+    time: "4:00 pm – 6:00 pm"
+    title: "Artificial Intelligence and Professionalism in the Halal Industry"
+    location: "Meeting Room" 
+  * type: "Leader Talk"
+    time: "4:15 pm – 4:35 pm"
+    title: "Country Success – BiH’s Capacity Building for Halal Economic Growth"
+    location: "Theatre" 
+  * type: "Panel Session"
+    time: "4:40 pm – 5:55 pm"
+    title: "Powered by Halal Echo: From Influence to Leadership: The Role of Influencers as Entrepreneurs in the Halal Sector"
+    location: "Theatre" 
+  * type: "Initiative Platform"
+    time: "6:00 pm – 6:10 pm"
+    title: "Muslim Tech Initiative"
+    location: "Theatre" 
+
+### day_2_prayer
+
+* Asr Prayer: "03:20 pm – 04:15 pm" 
+
+### day_2_workshop_topics (AI workshop)
+
+* "Challenges and opportunities presented by artificial intelligence in the halal sector."
+* "Review of best professional practices in product verification, supply chain management, and digital authentication."
+* "Presentation of practical tools and strategies for halal companies to implement AI solutions in a professional and effective manner."
+* "Enhancing participants’ understanding of how to build consumer trust through innovation and adherence to the highest professional standards." 
+
+### day_2_people (corrected spellings only; duplicates removed)
+
+* Moderator: Dr. Bandar Arab — Executive Director, Savola World Foundation 
+* Mr. Fazal Bahardeen — Chief Executive Officer, CrescentRating & HalalTrip 
+* Mr. Junaid Wahedna — Founder and Chairman of Wahed 
+* Moderator: Mr. Conor Clifford Murphy — Partner at DinarStandard 
+* H.E. Mr. Elmedin Konaković — Minister of Foreign Affairs of Bosnia and Herzegovina 
+* Moderator: Ms. Efnan Han — International News Anchor at TRT World 
+* Ms. Farzana Baduel — President-Elect of the Chartered Institute of Public Relations (CIPR) & CEO of Curzon PR 
+* Ms. Passant Nur El-Din — Content Creator & Tour Guide 
+* Mr. Gikhedel Benchamin — Content Creator, Thailand 
+* Mr. Muhammad Malik — Co-founder of SIFR Initiative 
+* Mr. Talha Shaikh — Digital Transformation Specialist, ICCD 
+* Mr. Daniyal Ahmed — AI Specialist, ICCD 
+* Mr. Murat Onuk — Managing Partner, Arz Asset Management 
+
+---
+
+## day_3_program
+
+* date: "2026-02-16"
+* items:
+
+  * type: "Panel Session"
+    time: "4:00 pm – 5:20 pm"
+    title: "Advancing Muslim Women’s Professionalism in the Global Halal Markets"
+    location: "Theatre" 
+  * type: "Workshop"
+    time: "4:00 pm – 6:00 pm"
+    title: "SMIIC, OIC Global Halal Quality Infrastructure, a Modern System for Global Halal Market and OIC/SMIIC Standards on Halal Issues"
+    location: "Meeting Room" 
+  * type: "Panel Session"
+    time: "5:30 pm – 6:45 pm"
+    title: "Halalpreneurship Track in partnership with Saleh Kamel Sustainable Entrepreneurship & Enterprise Development Organization (SKSEED)"
+    location: "Theatre" 
+
+### day_3_people (corrected spellings only)
+
+* Moderator: Ms. Natavan Mammadova — Secretary-General, Maida Nazir for Women’s Economic Empowerment 
+* Ms. Alia Jafar — Director, International Relations, Islamic Chamber of Commerce and Development 
+* Ms. Nawal AlBabtain — Director of Halal Product Advisory (HPA) at Halal Product Development Company (HPDC) 
+* H.E. Mr. İhsan Övüt — Secretary General, Standards and Metrology Institute for the Islamic Countries (SMIIC) 
+* Ms. Diana Sabrain — Co-Founder and Chief Executive Officer, OneAgrix 
+* Mr. Muhannad Taslaq — Director of Investments, Alchemist Doha 
+* Moderator: Dr. Wael Eldesouki Bedda — Secretary-General, Saleh Kamel Sustainable Entrepreneurship & Enterprise Development 
+* Mr. Ayman Elsawy — Chief Executive Officer, Bokra Holding 
+* Mr. Kerim Ture — Founder & Chairman, SalamBooking 
+* Mr. Saad Ismael Alami — Chief Executive Officer, Fadl Invest 
+
+### day_3_workshop_topics (OIC/SMIIC workshop)
+
+* "Organization of Islamic Cooperation (OIC) & Standards and Metrology Institute for Islamic Countries (SMIIC)."
+* "SMIIC’s Structure and SMIIC Organs."
+* "OIC Global Halal Quality Infrastructure (OHAQ) & IFHAB."
+* "Modern System for Global Halal Market."
+* "OIC/SMIIC Standards on Halal Issues." 
+
+---
+
+# SPONSORS / PARTNERS (CLEANED LABELS)
+
+## sponsor_categories (corrected)
+
+* Organizer
+* Diamond Sponsor
+* Platinum Sponsor
+* Gold Sponsor
+* Media Partner
+* Logistics Sponsor
+* Silver Sponsor
+* Official Sponsor
+* Strategic Sponsor 
+
+## sponsor_names (as visible in sponsor-page image)
+
+* Official Sponsor: "Halal Devco." 
+* Strategic Sponsor: "Dallah Albaraka" 
+* Diamond Sponsor: "pladis" 
+* Platinum Sponsor: "Sadia" 
+* Gold Sponsor: "Fakieh" 
+* Media Partner: "SBA" 
+
+---
+

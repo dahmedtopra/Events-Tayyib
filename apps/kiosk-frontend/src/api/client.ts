@@ -40,7 +40,11 @@ export async function fetchSSE(
         } else if (line.startsWith("data: ")) {
           const data = line.slice(6);
           if (eventType === "token") {
-            onToken(data);
+            try {
+              onToken(JSON.parse(data));
+            } catch {
+              onToken(data);
+            }
           } else if (eventType === "meta") {
             try { onMeta(JSON.parse(data)); } catch { /* skip */ }
           }

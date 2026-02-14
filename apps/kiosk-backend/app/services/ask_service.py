@@ -24,7 +24,13 @@ from app.services.offline_pack_service import (
   get_confident_suggestions,
   match_offline,
 )
-from app.services.rag_service import retrieve
+from app.services.rag_service import (
+  confidence_from_sources,
+  filter_sources_for_query,
+  is_landmarks_query,
+  is_landmarks_source_id,
+  retrieve,
+)
 
 OFFLINE_THRESHOLD = 0.25
 RAG_THRESHOLD = 0.35
@@ -165,6 +171,13 @@ def suggestion_chips(query: str, lang: str, retrieved_sources: List[Dict[str, An
   return chips
 
 
+def _offline_intent_conflict(query: str, source_ids: List[str]) -> bool:
+  if not source_ids:
+    return False
+  landmarks_match = any(is_landmarks_source_id(str(sid)) for sid in source_ids)
+  return landmarks_match != is_landmarks_query(query)
+
+
 def build_prompt(query: str, lang: str, sources: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
   lang_name = {"EN": "English", "AR": "Arabic", "FR": "French"}.get(lang, "English")
   snippets = "\n\n".join(
@@ -176,8 +189,15 @@ def build_prompt(query: str, lang: str, sources: List[Dict[str, Any]]) -> List[D
     f"Respond in {lang_name}.\n"
     "Use only the provided snippets. "
     "Stay factual and helpful. "
+    "For schedule/session/masterclass/exhibition questions, synthesize across all relevant snippets before concluding. "
+    "Do not claim an item is only on one day unless snippets explicitly state exclusivity. "
     "Do not include inline source tags like [Source 1] in the answer text. "
-    "Return concise blocks suitable for a kiosk."
+    "Return concise attendee guidance suitable for a kiosk.\n"
+    "Output style rules:\n"
+    "- Put the full answer in answer.direct.\n"
+    "- Keep answer.steps short and optional (use only if user explicitly asks for step-by-step guidance).\n"
+    "- Keep answer.mistakes as an empty list unless user explicitly asks what to avoid.\n"
+    "- Do not include labels like 'Direct Answer', 'Steps', or 'Common Mistakes' inside answer.direct."
   )
   user_text = (
     f"Language: {lang}\n"
@@ -329,19 +349,27 @@ def answer_query(payload: AskRequest) -> AskResponse:
     else:
       match, offline_conf = match_offline(effective_query, payload.lang)
       if match and offline_conf >= OFFLINE_THRESHOLD:
+        source_ids = [str(sid) for sid in match.get("source_ids", []) if sid]
+        if _offline_intent_conflict(effective_query, source_ids):
+          source_ids = []
         retrieved_for_offline, _ = retrieve(effective_query, payload.lang, top_k=5)
-        source_ids = match.get("source_ids", [])
+        retrieved_for_offline = filter_sources_for_query(effective_query, retrieved_for_offline)
         filtered = [
           s for s in retrieved_for_offline
           if s.get("source_id") in source_ids and s.get("score", 0) >= MIN_SOURCE_SCORE
         ]
         if len(filtered) >= MIN_SOURCES:
           answer = match.get("answer", {})
+          direct_offline = str(answer.get("direct", "")).strip()
+          if not direct_offline:
+            steps_offline = answer.get("steps", [])
+            if isinstance(steps_offline, list) and steps_offline:
+              direct_offline = str(steps_offline[0]).strip()
           response = AskResponse(
             answer=AnswerBlock(
-              direct=answer.get("direct", ""),
-              steps=answer.get("steps", []),
-              mistakes=answer.get("mistakes", []),
+              direct=direct_offline,
+              steps=[],
+              mistakes=[],
             ),
             sources=to_sources(filtered),
             confidence=offline_conf,
@@ -352,7 +380,9 @@ def answer_query(payload: AskRequest) -> AskResponse:
           _log_info("branch=offline sources=%d", len(filtered))
 
       if response.route_used != "offline":
-        retrieved_sources, rag_conf = retrieve(effective_query, payload.lang, top_k=8)
+        retrieved_sources, _ = retrieve(effective_query, payload.lang, top_k=12)
+        retrieved_sources = filter_sources_for_query(effective_query, retrieved_sources)
+        rag_conf = confidence_from_sources(retrieved_sources)
         strong_sources = [s for s in retrieved_sources if s.get("score", 0) >= MIN_SOURCE_SCORE]
         weak_rag = len(strong_sources) < MIN_SOURCES or rag_conf < RAG_THRESHOLD
         chips = suggestion_chips(original_query, payload.lang, retrieved_sources=retrieved_sources)
@@ -400,8 +430,10 @@ def answer_query(payload: AskRequest) -> AskResponse:
                 debug_notes="fallback: empty_answer",
               )
             else:
+              if not direct and steps_val:
+                direct = str(steps_val[0]).strip()
               response = AskResponse(
-                answer=AnswerBlock(direct=direct, steps=steps_val, mistakes=mistakes_val),
+                answer=AnswerBlock(direct=direct, steps=[], mistakes=[]),
                 sources=to_sources(strong_sources),
                 confidence=rag_conf,
                 refinement_chips=chips,

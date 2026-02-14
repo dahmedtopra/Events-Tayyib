@@ -1,19 +1,19 @@
 ﻿sources:
   - id: mhf_forum_program_en
     title: "Makkah Halal Forum Program (EN)"
-    url_or_path: "data/rag_corpus/pdfs/MHF_Program_EN.pdf"
+    url_or_path: "data/rag_corpus/texts/MHF_Program_EN.txt"
     lang: "EN"
-    type: "pdf"
+    type: "txt"
     approved_by: "ICHS event team"
-    approved_date: "2026-02-10"
+    approved_date: "2026-02-13"
 
   - id: mhf_forum_program_ar
     title: "برنامج منتدى مكة للحلال (AR)"
-    url_or_path: "data/rag_corpus/pdfs/MHF_Program_AR.pdf"
+    url_or_path: "data/rag_corpus/texts/MHF_Program_AR.txt"
     lang: "AR"
-    type: "pdf"
+    type: "txt"
     approved_by: "ICHS event team"
-    approved_date: "2026-02-12"
+    approved_date: "2026-02-13"
 
   - id: mhf_forum_program_fr
     title: "Programme du Makkah Halal Forum (FR)"
@@ -21,28 +21,4 @@
     lang: "FR"
     type: "txt"
     approved_by: "ICHS event team"
-    approved_date: "2026-02-10"
-
-  - id: mhf_landmarks_en
-    title: "Makkah Landmarks Guide (EN)"
-    url_or_path: "data/rag_corpus/pdfs/MHF_Landmarks_EN.pdf"
-    lang: "EN"
-    type: "pdf"
-    approved_by: "ICHS event team"
-    approved_date: "2026-02-10"
-
-  - id: mhf_landmarks_ar
-    title: "دليل معالم مكة (AR)"
-    url_or_path: "data/rag_corpus/pdfs/MHF_Landmarks_AR.pdf"
-    lang: "AR"
-    type: "pdf"
-    approved_by: "ICHS event team"
-    approved_date: "2026-02-10"
-
-  - id: mhf_landmarks_fr
-    title: "Guide des lieux emblématiques de la Mecque (FR)"
-    url_or_path: "data/rag_corpus/pdfs/MHF_Landmarks_FR.pdf"
-    lang: "FR"
-    type: "pdf"
-    approved_by: "ICHS event team"
-    approved_date: "2026-02-10"
+    approved_date: "2026-02-13"

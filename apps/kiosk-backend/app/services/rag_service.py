@@ -4,6 +4,85 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
+_LANDMARK_SOURCE_TERMS = (
+  "landmark",
+  "landmarks",
+  "maalam",
+  "معالم",
+  "floor_plan",
+  "floor-plan",
+  "venue_map",
+  "venue-map",
+  "map",
+)
+
+_LANDMARK_QUERY_TERMS = (
+  "landmark",
+  "landmarks",
+  "places to visit",
+  "historical site",
+  "tourist",
+  "attraction",
+  "visit makkah",
+  "map",
+  "floor plan",
+  "venue map",
+  "معالم",
+  "اماكن",
+  "أماكن",
+  "خريطة",
+  "مخطط",
+  "lieux",
+  "monuments",
+  "carte",
+  "plan du lieu",
+)
+
+
+def _source_text(source_id: str, title: str) -> str:
+  return f"{source_id} {title}".strip().lower()
+
+
+def is_landmarks_source_id(source_id: str) -> bool:
+  text = (source_id or "").strip().lower()
+  return any(term in text for term in _LANDMARK_SOURCE_TERMS)
+
+
+def _is_landmarks_source(source: Dict[str, Any]) -> bool:
+  text = _source_text(str(source.get("source_id", "")), str(source.get("title", "")))
+  return any(term in text for term in _LANDMARK_SOURCE_TERMS)
+
+
+def is_landmarks_query(query: str) -> bool:
+  q = (query or "").strip().lower()
+  return any(term in q for term in _LANDMARK_QUERY_TERMS)
+
+
+def filter_sources_for_query(query: str, sources: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+  if not sources:
+    return []
+
+  landmark_sources = [s for s in sources if _is_landmarks_source(s)]
+  non_landmark_sources = [s for s in sources if not _is_landmarks_source(s)]
+
+  if is_landmarks_query(query):
+    return landmark_sources
+  return non_landmark_sources
+
+
+def confidence_from_sources(sources: List[Dict[str, Any]]) -> float:
+  if not sources:
+    return 0.0
+  best = 0.0
+  for source in sources:
+    try:
+      s = float(source.get("score", 0.0) or 0.0)
+    except Exception:
+      s = 0.0
+    if s > best:
+      best = s
+  return max(0.0, min(1.0, best))
+
 def get_chroma_path() -> str:
   env_val = os.getenv("CHROMA_PATH")
   if env_val:
